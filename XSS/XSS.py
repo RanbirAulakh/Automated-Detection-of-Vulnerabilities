@@ -1,0 +1,1 @@
+class XSS(object):

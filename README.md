@@ -31,3 +31,11 @@ Create a command line style program
 - [ ] Display score for each violations
 - [ ] Classify which violated
 - [ ] Display a fix for it (prevent it)
+
+
+### Languages
+Python 3
+
+### Dependencies
+Requests
+Beautiful Soup
