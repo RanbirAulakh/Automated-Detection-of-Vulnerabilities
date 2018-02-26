@@ -8,3 +8,5 @@ phpinfo.php
 .config
 setting
 settings
+readme
+version

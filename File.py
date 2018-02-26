@@ -10,7 +10,7 @@ class File(object):
     def openFile(self,filename):
         path = self.directory + "/"+filename
         if not os.path.isfile(path):
-            raise Exception("We were not able to located the file "+ filename + " at the following path "+path)
+            raise Exception("We were not able to located the file " + filename + " at the following path "+path)
 
         with open(path) as f:
             return f.readline()
