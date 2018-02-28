@@ -1,7 +1,6 @@
 import requests
 
-
-class Request(object):
+class Requests(object):
     request = None
 
     def __init__(self):
