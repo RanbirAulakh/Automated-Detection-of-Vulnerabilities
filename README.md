@@ -37,5 +37,10 @@ Create a command line style program
 Python 3
 
 ### Dependencies
-Requests
-Beautiful Soup
+Requests, BeautifulSoup4, Argparse
+
+pip3 install requests
+
+pip3 install beautifulsoup4
+
+pip3 install argparse
