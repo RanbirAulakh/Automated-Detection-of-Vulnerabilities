@@ -16,7 +16,6 @@ class Link(object):
         self.url = url
 
     def addInput(self,input):
-
         if not isinstance(input,InputClass.Input):
             raise Exception(input + " must be an instance of " + InputClass.Input)
         self.inputs.append(input)

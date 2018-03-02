@@ -1,14 +1,13 @@
 import sys
 import argparse
 
-
 from Attacks.BruteForce import BruteForce
 from Attacks.PassiveSQLInjection import PassiveSQLInjection
 from Attacks.ActiveSQLInjection import ActiveSQLInjection
 from Utilities.Requests import Requests
 
 def choicesDescriptions():
-	return """
+	return """C
 Vulnerability supports the following:
 	ALL		- Execute All Vulnerabilities
 	BRUTE		- Brute Force Every Possible Inputs (LOGIN)
@@ -36,21 +35,26 @@ def main():
 	)
 	args = parser.parse_args()
 
-	print("URL: " + args.url)
-	print("VUL: " + args.vulnerability)
+	url = args.url
+	vul = args.vulnerability
 
 
 	# awful implementation
-	r = Requests()
-	r = r.request
+	request = Requests()
+	request = request.request
 
 	if args.vulnerability is None:
 		choicesDescriptions()
 	elif args.vulnerability == "ALL":
 		pass
+
+
 	elif args.vulnerability == "BRUTE":
-		BruteForce.printTest()
+		b = BruteForce(url, request)
+		b.startBruteFoce()
 		pass
+
+
 	elif args.vulnerability == "A-SQL":
 		a_sql = ActiveSQLInjection()
 
