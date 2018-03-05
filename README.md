@@ -37,10 +37,12 @@ Create a command line style program
 Python 3
 
 ### Dependencies
-Requests, BeautifulSoup4, Argparse
+Requests, BeautifulSoup4, Argparse, RoboBrowser
 
 pip3 install requests
 
 pip3 install beautifulsoup4
 
 pip3 install argparse
+
+pip3 install robobrowser
