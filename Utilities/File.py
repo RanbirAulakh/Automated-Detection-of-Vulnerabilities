@@ -1,6 +1,5 @@
 import os
 
-
 class File(object):
     directory = None
 
@@ -25,4 +24,10 @@ class File(object):
         return self.openFile('activeSQL.txt')
 
     def getPossibleUserPass(self):
-        return self.openFile('userspass.txt')
+        return self.openFile('userpass.txt')
+
+    def getDirectoriesLinks(self):
+        return self.openFile('directories.txt')
+
+    def getFilesLinks(self):
+        return self.openFile('filenames.txt')

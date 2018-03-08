@@ -46,3 +46,10 @@ pip3 install beautifulsoup4
 pip3 install argparse
 
 pip3 install robobrowser
+
+
+
+### Credits (+URL)
+
+filenames.txt/directories.txt
+-- https://blog.thireus.com/web-common-directories-and-filenames-word-lists-collection/

