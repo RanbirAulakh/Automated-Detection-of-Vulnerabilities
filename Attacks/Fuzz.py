@@ -14,9 +14,11 @@ class Fuzzer(object):
         self.toCrawl = []
         self.soup = None
         self.parser = 'html.parser'
+        self.main = None
 
     def discover(self, url):
         response = self.browser.get(url)
+        self.main = url
         #status code is 200 so we will continue
         if response.status_code:
             self.toCrawl.append(url)
@@ -34,17 +36,18 @@ class Fuzzer(object):
         self.set_beautifulSoup(text)
         return self.soup.find_all('input')
 
-
-
-
+    def get_fuzz_links(self):
+        return self.links
 
     def crawler(self,url):
 
         while self.toCrawl:
             print(url)
-            if url not in self.crawled:
+            if url not in self.crawled and self.main in url:
                 response = self.browser.get(url)
                 if response.status_code == 200:
+                    if response.url not in self.toCrawl and not response.url.startswith("#"):
+                        self.toCrawl.append(response.url)
                     self.crawled.append(url)
                     linkObject = Link()
                     content = response.text
@@ -59,9 +62,17 @@ class Fuzzer(object):
                     for link in self.parse_links(content):
                         link = link.get('href')
                         if link:
-                            if 'https' not in link and 'http' not in link:
+                            if 'https' not in link and 'http' not in link and not link.startswith("#"):
+
+                                if link.endswith("/"):
+                                    link = link[1:]
+
                                 if link.startswith('/'):
                                     link = link[1:]
+
+                                if url.endswith("/"):
+                                    url = url[:len(url)]
+
                                 link = url + "/"+link
 
                             if link not in self.toCrawl:

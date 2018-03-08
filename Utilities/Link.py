@@ -10,18 +10,22 @@ class Link(object):
     def getInputs(self):
         return self.inputs
 
+    def addInput(self,input):
+        self.inputs.append(input)
+
     def getUrl(self):
         return self.url
 
     def addUrl(self,url):
         self.url = url
 
-
     def addContent(self,content):
         self.content = content
 
     def getContent(self):
         return self.content
+
+
 
 
 

@@ -16,7 +16,7 @@ from Utilities import Link
 # print(r.text)
 
 
-url = "http://hostjams.com"
+url = "http://localhost/DVWA/login.php"
 request = Requests()
 request = request.request
 fuzz = Fuzzer(request)
