@@ -6,8 +6,10 @@ from Attacks.PassiveSQLInjection import PassiveSQLInjection
 from Attacks.ActiveSQLInjection import ActiveSQLInjection
 from Utilities.Requests import Requests
 
+from timeit import default_timer as timer
+
 def choicesDescriptions():
-	return """C
+	return """
 Vulnerability supports the following:
 	ALL		- Execute All Vulnerabilities
 	BRUTE		- Brute Force Every Possible Inputs (LOGIN)
@@ -46,12 +48,32 @@ def main():
 	if args.vulnerability is None:
 		choicesDescriptions()
 	elif args.vulnerability == "ALL":
+		# get all possible links
+
+
+		# brute force login page
+		b = BruteForce(url, request)
+		flag, username, password, url = b.startBruteForce()
+
 		pass
 
 
 	elif args.vulnerability == "BRUTE":
+		start = timer()
 		b = BruteForce(url, request)
-		b.startBruteFoce()
+		flag, username, password, url = b.startBruteForce()
+		end = timer()
+
+		print("\nBRUTE FOCE STATS\n=========")
+		print("Cracked? " + str(flag))
+		print("URL: " + url)
+		print("After Login URL: " + url)
+		print("Username: " + username)
+		print("Password: " + password)
+		print("Score: <Work-In-Progress>")
+		print("Security Principles Violation: <Work-In-Progress>")
+		print("--- Completed in %.3f ms" % (end - start))
+
 		pass
 
 
