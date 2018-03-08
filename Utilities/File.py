@@ -5,15 +5,15 @@ class File(object):
     directory = None
 
     def __init__(self):
-        self.directory = os.path.split(os.path.abspath(__file__))[0]
+        self.directory = os.path.abspath(os.path.join(__file__ ,"../.."))
 
     def openFile(self,filename):
-        path = self.directory + "/" + filename
+        path = self.directory + "/Files/" + filename
         if not os.path.isfile(path):
             raise Exception("We were not able to located the file " + filename + " at the following path "+path)
 
         with open(path) as f:
-            return f.readline()
+            return f.readlines()
 
     def getSensitiveVector(self):
         return self.openFile('sensitive.txt')
@@ -23,3 +23,6 @@ class File(object):
 
     def getActiveSQLInjection(self):
         return self.openFile('activeSQL.txt')
+
+    def getPossibleUserPass(self):
+        return self.openFile('userspass.txt')

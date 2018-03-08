@@ -1,11 +1,12 @@
 import sys
 import argparse
 
-
 from Attacks.BruteForce import BruteForce
 from Attacks.PassiveSQLInjection import PassiveSQLInjection
 from Attacks.ActiveSQLInjection import ActiveSQLInjection
 from Utilities.Requests import Requests
+
+from timeit import default_timer as timer
 
 def choicesDescriptions():
 	return """
@@ -36,21 +37,46 @@ def main():
 	)
 	args = parser.parse_args()
 
-	print("URL: " + args.url)
-	print("VUL: " + args.vulnerability)
+	url = args.url
+	vul = args.vulnerability
 
 
 	# awful implementation
-	r = Requests()
-	r = r.request
+	request = Requests()
+	request = request.request
 
 	if args.vulnerability is None:
 		choicesDescriptions()
 	elif args.vulnerability == "ALL":
+		# get all possible links
+
+
+		# brute force login page
+		b = BruteForce(url, request)
+		flag, username, password, url = b.startBruteForce()
+
 		pass
+
+
 	elif args.vulnerability == "BRUTE":
-		BruteForce.printTest()
+		start = timer()
+		b = BruteForce(url, request)
+		flag, username, password, url = b.startBruteForce()
+		end = timer()
+
+		print("\nBRUTE FOCE STATS\n=========")
+		print("Cracked? " + str(flag))
+		print("URL: " + url)
+		print("After Login URL: " + url)
+		print("Username: " + username)
+		print("Password: " + password)
+		print("Score: <Work-In-Progress>")
+		print("Security Principles Violation: <Work-In-Progress>")
+		print("--- Completed in %.3f ms" % (end - start))
+
 		pass
+
+
 	elif args.vulnerability == "A-SQL":
 		a_sql = ActiveSQLInjection()
 
