@@ -1,10 +1,11 @@
-import Input.Input as InputClass
+from Utilities import Input
 
 class Link(object):
 
     def __init__(self):
         self.url = None
         self.inputs = []
+        self.content = None
 
     def getInputs(self):
         return self.inputs
@@ -16,8 +17,18 @@ class Link(object):
         self.url = url
 
     def addInput(self,input):
-
-        if not isinstance(input,InputClass.Input):
-            raise Exception(input + " must be an instance of " + InputClass.Input)
         self.inputs.append(input)
+
+    def addContent(self,content):
+        self.content = content
+
+    def getInputs(self):
+        return self.inputs
+
+    def getContent(self):
+        return self.content
+
+    def getUrl(self):
+        return self.url
+
 
