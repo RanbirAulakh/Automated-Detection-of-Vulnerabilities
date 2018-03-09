@@ -39,17 +39,35 @@ class Fuzzer(object):
     def get_fuzz_links(self):
         return self.links
 
-    def crawler(self,url):
 
+    def crawler(self,url):
+        print("CRAWLING")
+
+        response = self.browser.get(url)
+        if response.status_code == 200:
+            linkObject = Link()
+            linkObject.addUrl(url)
+            content = response.text
+            linkObject.addContent(content)
+
+            #get all inputs
+            for input in self.parse_inputs(content):
+                linkObject.addInput(input)
+            self.links.append(linkObject)
+
+
+
+
+
+        """
         while self.toCrawl:
             print(url)
             if url not in self.crawled and self.main in url:
                 response = self.browser.get(url)
                 if response.status_code == 200:
-                    if response.url not in self.toCrawl and not response.url.startswith("#"):
-                        self.toCrawl.append(response.url)
                     self.crawled.append(url)
                     linkObject = Link()
+                    linkObject.addUrl(url)
                     content = response.text
                     linkObject.addContent(content)
 
@@ -62,17 +80,9 @@ class Fuzzer(object):
                     for link in self.parse_links(content):
                         link = link.get('href')
                         if link:
-                            if 'https' not in link and 'http' not in link and not link.startswith("#"):
-
-                                if link.endswith("/"):
-                                    link = link[1:]
-
+                            if 'https' not in link and 'http' not in link and '#' not in link:
                                 if link.startswith('/'):
                                     link = link[1:]
-
-                                if url.endswith("/"):
-                                    url = url[:len(url)]
-
                                 link = url + "/"+link
 
                             if link not in self.toCrawl:
@@ -82,6 +92,7 @@ class Fuzzer(object):
             self.toCrawl.remove(url)
             if self.toCrawl:
                 url = self.toCrawl[0]
+        """
 
 
 
