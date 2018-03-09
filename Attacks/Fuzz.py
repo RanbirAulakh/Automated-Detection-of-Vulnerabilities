@@ -3,6 +3,11 @@ from bs4 import BeautifulSoup
 import re
 from Utilities.Input import Input
 class Fuzzer(object):
+
+    """
+        This fuzz a page for all requires information about the page
+        and create a link object which can then be used by all attack classes
+    """
     guess = False
     browser = None
     links = None

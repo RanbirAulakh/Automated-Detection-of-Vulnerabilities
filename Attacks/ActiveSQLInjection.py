@@ -3,6 +3,11 @@ from Utilities.File import File
 
 class ActiveSQLInjection(object):
 
+	"""
+		This open the passive sql vectors file and loop through all
+		links object to see which link is vulnerable to active sql injection
+	"""
+
 	def __init__(self,request):
 		self.file = File()
 		self.request = request

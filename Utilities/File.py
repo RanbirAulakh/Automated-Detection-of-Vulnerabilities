@@ -3,6 +3,10 @@ import os
 class File(object):
     directory = None
 
+    """
+        The file object that open and return specific requested files
+    """
+
     def __init__(self):
         self.directory = os.path.abspath(os.path.join(__file__ ,"../.."))
 

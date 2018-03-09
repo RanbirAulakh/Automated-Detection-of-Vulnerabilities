@@ -6,6 +6,10 @@ class XSS(object):
   import urllib.request as urlreq
   from robobrowser import RoboBrowser
 
+  """
+    Perform XSS attack
+  """
+
 
   def checkDVWAPage(URL):
       page = urlreq.urlopen(URL)

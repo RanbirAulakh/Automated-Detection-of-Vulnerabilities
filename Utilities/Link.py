@@ -2,6 +2,11 @@ from Utilities import Input
 
 class Link(object):
 
+    """
+    This is the link object that contain information about a link such as
+    url, input parameters and page content
+    """
+
     def __init__(self):
         self.url = None
         self.inputs = []
