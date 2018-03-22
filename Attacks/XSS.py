@@ -1,56 +1,52 @@
+from Utilities.Requests import Requests
+from Utilities.File import File
+
 class XSS(object):
-  
-  
-  from bs4 import BeautifulSoup
-  import re
-  import urllib.request as urlreq
-  from robobrowser import RoboBrowser
-
-  """
-    Perform XSS attack
-  """
-
-
-  def checkDVWAPage(URL):
-      page = urlreq.urlopen(URL)
-      soup = BeautifulSoup(page.read())
-
-      forms = soup.find_all('form')
-      for form in forms:
-          #print("Parsing form...")
-          localInputs = form.find_all('input')
-          localTextAreas = form.find_all('textarea')
-
-      browser = RoboBrowser()
-      browser.open(URL)
-      print("Starting URL: " + browser.url)
-      form = browser.get_form(method='post')
-      #Due to dvwa, need to login to get to target page
-      form['username'].value = 'admin'
-      form['password'].value = 'password'
-      form.serialize()
-      browser.submit_form(form)
-
-      #Should be on a new page now?
-      #Figure out what my current URL is
-      print(browser.url)
-      #Change URL
-      browser.open(URL)
-      print(browser.url)
-      XSSPageForms = browser.get_form(method='post')
-      print(XSSPageForms.fields)
-      #NOTE: name and message have character caps (Because bad website is bad)
-      XSSPageForms["txtName"].value = "PyScript"
-      XSSPageForms["mtxMessage"].text = 'Python Says Hello' #Magic injection
-      browser.submit_form(form, submit='btnClear')
-      #We are triggering the button, but we're still missing some proccess;
-      #Whatever we're saving isn't being stored- might be related to auth?
-
-
-
-  def testForms(formList):
-      #Somehow extract the forms using robobrowser and feed in samples from
-      #websites on how to test for XSS in forms (Not in links)
-      return
-
-  checkDVWAPage("http://127.0.0.1/dvwa/vulnerabilities/xss_s/")
+	
+	def __init__(self, request):
+		self.file = File()
+		self.request = request
+		
+		
+	#Takes in list of inputs that can be modified to store information
+	def attackStored(self, forms):
+		self.forms = forms
+		#for form in forms:
+			#Iterate through all possible forms using test inputs to see if we get a reaction. This is a bit harder to automate, as we have to update the page and check for specific reactions.
+		return
+        
+	def attackReflect(self, links):
+		print("TESTING REFLECTED XSS ATTACK")
+		self.links = links
+		
+		#Load in examples of XSS scripts from some file, much like the Active SQL
+		#This is stored in as vectors? Similar to ActiveSQLInjection
+		
+		if self.links:
+			for link in self.links:
+				url = link.getUrl()
+				inputs = link.getInputs()
+				payload = {}
+				
+				#Attempt to find something in all URLs that we can inject a script into
+				for input in inputs:
+					if input:
+						name = input.get('name')
+						value = input.get('value')
+						
+						if not value:
+							#Set some default value 
+							value = "<script>alert(123)</script>"
+							
+						payload[name] = value
+				
+				#Submit and test payload
+				print(payload)
+				query = self.request.post(url,data=payload)
+				
+				#Check result of running this on website, what do we get back?
+				#How do we determine the script ran?
+				print(type(query))
+				print(query.text.lower())
+			
+			
