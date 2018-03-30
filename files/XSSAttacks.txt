@@ -1,0 +1,2 @@
+<script>alert(123)</script>
+<body onload=alert('test1')>
