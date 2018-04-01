@@ -1,0 +1,12 @@
+mysql
+admin
+credit card
+social security
+password
+phpinfo.php
+.htaccess
+.config
+setting
+settings
+readme
+version
