@@ -6,13 +6,15 @@ from Attacks.DirectoriesFilesTraversal import DirectoriesFilesTraversal
 from Attacks.PassiveSQLInjection import PassiveSQLInjection
 from Attacks.ActiveSQLInjection import ActiveSQLInjection
 from Utilities.Requests import Requests
+from Utilities.Classification import Classification
 
 from timeit import default_timer as timer
 
 def choicesDescriptions():
+	# ALL		- Execute All Vulnerabilities
+
 	return """
 Vulnerability supports the following:
-	ALL		- Execute All Vulnerabilities
 	BRUTE		- Brute Force Every Possible Inputs (LOGIN)
 	A-SQL		- Active SQL Injection
 	P-SQL		- Passive SQL Injection
@@ -21,37 +23,37 @@ Vulnerability supports the following:
 	DIR-TRA		- Directories/Files Traversal (Failure to restrict files, folders, and URL access)
 	"""
 
-def getChoices():
-	return ["ALL", "BRUTE", "A-SQL", "P-SQL", "XSS", "CSRF"]
-
-
 def main():
 	parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter, epilog=choicesDescriptions())
 	parser.add_argument(
+		"-v", '--vulnerability',
+		help='Vulnerabilities Choices. See below...',
+		metavar='',
+		required=True
+	)
+	parser.add_argument(
 	   "-u", '--url', 
 	   help='Website you want to attack',
+		metavar='',
 	   required=True
 	)
 	parser.add_argument(
-	   "-v", '--vulnerability', 
-	   help='Vulnerabilities Choices. See the choices options below: '+', '.join(getChoices()), metavar='',
-	   required=True
+	   "-f", '--file',
+	   help='Specific textfiles to use for attacking. Otherwise will use defaults.',
+		metavar='',
+	   required=False
 	)
 	args = parser.parse_args()
 
 	url = args.url
 	vul = args.vulnerability
 
-
-	# awful implementation
 	request = Requests()
 	request = request.request
 
-	if args.vulnerability is None:
+	classification = Classification()
+	if vul is None or url is None:
 		choicesDescriptions()
-
-	elif args.vulnerability == "ALL":
-		print("NOT IMPLEMENTED YET!")
 
 	elif args.vulnerability == "DIR-TRA":
 		start = timer()
@@ -68,6 +70,7 @@ def main():
 			print("Files\n--------")
 			for i in filesLst:
 				print("--- " + i)
+
 		print("Score: <Work-In-Progress>")
 		print("Security Principles Violation: <Work-In-Progress>")
 		print("--- Completed in %.3f ms" % (end - start))
@@ -85,8 +88,11 @@ def main():
 		print("After Login URL: " + url)
 		print("Username: " + username)
 		print("Password: " + password)
-		print("Score: <Work-In-Progress>")
-		print("Security Principles Violation: <Work-In-Progress>")
+
+		if flag:
+			classification.vulnerability(vul)
+		# print("Score: <Work-In-Progress>")
+		# print("Security Principles Violation: <Work-In-Progress>")
 		print("--- Completed in %.3f ms" % (end - start))
 
 	elif args.vulnerability == "A-SQL":

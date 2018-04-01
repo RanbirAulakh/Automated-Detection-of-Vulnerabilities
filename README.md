@@ -32,15 +32,9 @@ Misc
 Python 3
 
 #### Dependencies
-Requests, BeautifulSoup4, Argparse, RoboBrowser
+Requests, BeautifulSoup4, Argparse
 
-pip3 install requests
-
-pip3 install beautifulsoup4
-
-pip3 install argparse
-
-pip3 install robobrowser
+`pip3 install requests beautifulsoup4 argparse`
 
 ### Project & Environment setup
 1. Download Xampp and install https://www.apachefriends.org/index.html
@@ -51,18 +45,18 @@ pip3 install robobrowser
 5. Happy coding
 
 ### Usage
-$ python3 Test.py
+`$ python3 Test.py`
 This will run at test of active and passive sql injections as well as bruteforce logins
 
-$ python3 main.py -h
+`$ python3 main.py -h`
 This will print out the usage of python and how to use it
 
-$ python3 main.py -u <URL> -v <Vulnerability Type>
+`$ python3 main.py -u <URL> -v <Vulnerability Type>`
 
-$ python3 main.py -u http://localhost/dvwa/ -v BRUTE
+`$ python3 main.py -u http://localhost/dvwa/ -v BRUTE`
 It will brute force the login, and prints out the username/password
 
-$ python3 main.py -u http://localhost/dvwa -v DIR-TRA
+`$ python3 main.py -u http://localhost/dvwa -v DIR-TRA`
 It will check for unathorized folder/file access
 
 ### Credits (+URL)
