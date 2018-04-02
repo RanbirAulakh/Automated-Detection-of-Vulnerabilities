@@ -109,13 +109,13 @@ def main():
 		xStr = x.attackStored(fuzz.get_fuzz_links())
 		
 		print("\nXSS STATS\n=========")
-		print("Vulnerable? ")
+		
 		print("URL: " + args.url)
 		print("After XSS Injection URL: " + url)
-		"""if(xRf == 1 or xStr == 1):
-            		classification.vulnerability("XSS")
-		print("Score: {}".format(1))
-		print("Security Principles Violation: Lack of Sanitation")"""
+		if(xRf == 1 or xStr == 1):
+			classification.vulnerability("XSS")
+		#else:
+			#print("No issues detected")
 	elif args.vulnerability == "CSRF":
 		print("NOT IMPLEMENTED YET!")
 
