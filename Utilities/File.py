@@ -1,4 +1,4 @@
-import os
+import os, logging
 
 class File(object):
     directory = None
@@ -18,6 +18,7 @@ class File(object):
         """
         path = self.directory + "/Files/" + filename
         if not os.path.isfile(path):
+            logging.error("We were not able to located the file " + filename + " at the following path "+path)
             raise Exception("We were not able to located the file " + filename + " at the following path "+path)
 
         with open(path) as f:

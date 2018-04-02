@@ -1,6 +1,6 @@
 from Utilities.Link import  Link
 from bs4 import BeautifulSoup
-import re
+import re, logging
 from url_normalize import url_normalize
 
 class Fuzzer(object):
@@ -40,10 +40,10 @@ class Fuzzer(object):
 
     def display_msg_and_terminate(msg):
         if not msg:
-            print("You must supply a error message")
+            logging.error("You must supply a error message")
         
         else:
-            print(msg)
+            logging.info(msg)
 
         exit()
 
@@ -94,7 +94,7 @@ class Fuzzer(object):
 
 
     def crawler(self,url):
-        print("Fuzz/Crawling...")
+        logging.info("Fuzz/Crawling...")
         self.validate_url(url) #the very first url must be a valid url
         prevCrawled = url
         count = 0
@@ -195,17 +195,18 @@ class Fuzzer(object):
 
 
     def print_discovered_links(self):
-        print("Internal Links")
-        print("==============")
-        print()
-        for internal in self.internalLinks:
-            print(internal)
 
-        print("\nExternal Links")
-        print("==============")
-        print()
+        logging.info("Internal Links")
+        logging.info("==============")
+        logging.info()
+        for internal in self.internalLinks:
+            logging.info(internal)
+
+            logging.info("\nExternal Links")
+            logging.info("==============")
+            logging.info()
         for external in self.externalLinks:
-            print(external)
+            logging.info(external)
 
     def parse_inputs(self,text):
         self.set_beautiful_soup(text)

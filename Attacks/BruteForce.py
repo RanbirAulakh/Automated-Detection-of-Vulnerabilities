@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 from Utilities.File import File
+import logging
 
 
 class BruteForce(object):
@@ -21,7 +22,7 @@ class BruteForce(object):
 
         r = self.request.get(self.url)
 
-        print("Request URL: " + r.url)
+        logging.info("Request URL: " + r.url)
 
         username = ""
         password = ""
@@ -56,7 +57,7 @@ class BruteForce(object):
                         url = s.url
                         username = textfile[i].strip()
                         password = textfile[j].strip()
-                        print("Successfully cracked it! " + username  + ":" + password)
+                        logging.info("Successfully cracked it! " + username  + ":" + password)
                         flag = True
                         break
 
