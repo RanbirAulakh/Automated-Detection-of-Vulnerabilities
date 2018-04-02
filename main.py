@@ -53,6 +53,9 @@ def main():
 	request = Requests()
 	request = request.request
 
+	fuzz = Fuzzer(request)
+	fuzz.discover(url)
+
 	classification = Classification()
 	if vul is None or url is None:
 		choicesDescriptions()
@@ -103,8 +106,7 @@ def main():
 		print("NOT IMPLEMENTED YET!")
 	elif args.vulnerability == "XSS":
 		x = XSS(request)
-		fuzz = Fuzzer(request)
-		fuzz.discover(url)
+
 		xRf = x.attackReflect(fuzz.get_fuzz_links())
 		xStr = x.attackStored(fuzz.get_fuzz_links())
 		

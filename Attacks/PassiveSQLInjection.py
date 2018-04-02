@@ -21,30 +21,41 @@ class PassiveSQLInjection(object):
 		:return:
 		"""
 		self.links = links
-		vectors = self.file.getActiveSQLInjection()
+		vectors = self.file.getPassiveSQLInjectionVector()
 
 		if self.links:
-			for link in self.links:
-				url = link.getUrl()
-				inputs = link.getInputs()
+			for link in links:
 				payload = {}
-				for vector in vectors:
-					for input in inputs:
-						if input:
-							name = input.get('name')
-							value = input.get('value')
+				url = link.getUrl()
+				inputs  = link.getInputs()
 
-							#if it has no value, give it the sql injection vector value
+				#prepare to load our attack vector in the empty inputs
+				for vector in vectors:
+					for input_tag in inputs:
+						if input_tag:
+							name = input_tag.get('name')
+							value = input_tag.get('value')
+
 							if not value:
 								value = vector
 
 							payload[name] = value
 
-					#submit and test
-					print(payload)
+					
+					#submit the payload with the injected value
 					query = self.request.post(url,data=payload)
+					#print(query.text)
 
-					if "sql syntax" in query.text.lower():
+					if "syntax" in query.text.lower():
 						print("SQL INJECTION VULNERABILITY FOUND")
 						print(payload)
-						exit()
+
+					#try get
+					query = self.request.get(url,data=payload)
+
+					if "syntax" in query.text.lower():
+						print("SQL INJECTION VULNERABILITY FOUND")
+						print(payload)
+				
+
+			

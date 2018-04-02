@@ -25,52 +25,24 @@ from Attacks.crawler import Crawl
     PERFORM A UNIT TEST ON BRUTE FORCE, ACTIVE AND PASSIVE SQL
 """
 
-
-url = "http://localhost/dvwa/login.php"
-
-
-
 request = Requests()
 request = request.request
-"""
-start = timer()
-
+url = "http://localhost/dvwa"
 b = BruteForce(url, request)
 flag, username, password, url = b.startBruteForce()
 
-end = timer()
-"""
-
-"""
-url = 'http://localhost/dvwa/vulnerabilities/sqli/'
-url='https://hostjams.com'
 fuzz = Fuzzer(request)
 #fuzz.restrict_domain(url)
 fuzz.discover(url)
 fuzz.print_discovered_links()
 
-"""
-
-"""
-passiveSql = PassiveSQLInjection(request)
-passiveSql.attack(fuzz.get_fuzz_links())
-"""
-
-print("")
-
-#url = 'http://localhost/dvwa/vulnerabilities/xss_r/?name=<script>alert(123)<%2Fscript>#'
-url = 'http://localhost/dvwa/vulnerabilities/xss_r/'
+p_sql = PassiveSQLInjection(request)
+links = fuzz.get_fuzz_links()
+p_sql.attack(links)
 
 
-xfuzz = Fuzzer(request)
-xfuzz.discover(url)
 
-xss = XSS(request)
-xss.attackReflect(xfuzz.get_fuzz_links())
 
-url = 'http://localhost/dvwa/vulnerabilities/xss_s/'
-xrfuzz = Fuzzer(request)
-xrfuzz.discover(url)
 
-sxss = XSS(request)
-sxss.attackStored(xrfuzz.get_fuzz_links())
+
+

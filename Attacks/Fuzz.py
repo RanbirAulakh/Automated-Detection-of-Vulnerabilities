@@ -1,7 +1,6 @@
 from Utilities.Link import  Link
 from bs4 import BeautifulSoup
 import re
-from Utilities.Input import Input
 from url_normalize import url_normalize
 
 class Fuzzer(object):
@@ -23,6 +22,7 @@ class Fuzzer(object):
         self.parser = 'html.parser'
         self.externalLinks = []
         self.internalLinks = []
+        self.limit = 50
 
         self.tags = {
             "a": "href",
@@ -97,8 +97,9 @@ class Fuzzer(object):
         print("Fuzz/Crawling...")
         self.validate_url(url) #the very first url must be a valid url
         prevCrawled = url
+        count = 0
 
-        while self.toCrawl:
+        while self.toCrawl and count<self.limit:
             
             #crawler is restrict to only crawl internal links
             if url not in self.crawled:
@@ -144,7 +145,7 @@ class Fuzzer(object):
                                             
 
 
-                                            if link not in self.toCrawl and '#' not in link and link not in self.crawled:
+                                            if link not in self.toCrawl and '#' not in link and link not in self.crawled and "logout" not in link.lower():
                                                 self.toCrawl.append(link)
 
                                             if not directoryParentChecked:
@@ -153,6 +154,7 @@ class Fuzzer(object):
 
                         #record the internal links(we are only interested in the success links)
                         if self.is_internal_link(url) and url not in self.internalLinks:
+                            #print(url)
                             self.internalLinks.append(url)
 
                 #record the external links
@@ -171,6 +173,8 @@ class Fuzzer(object):
             prevCrawled = url
             if self.toCrawl:
                 url = self.toCrawl[0]
+
+            count+=1
 
         #print(self.links)
 
