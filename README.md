@@ -12,16 +12,17 @@
 
 Creating scripts that can discover the following vulnerabilities
 - [ ] SQL Injections (50% completed)
-- [ ] Cross Site Scripting (XSS)
+- [x] Cross Site Scripting (XSS)
 - [ ] Broken Authentication
 - [x] Failure to restrict files, folders, and URL access
+- [x] Brute Force
 - [ ] Cross-Site Request Forgery (CSRF)
 
 Create a command line style program 
 - [x] Ability to take URL
 - [ ] Display score for each violations
-- [ ] Classify which violated
-- [ ] Display a fix for it (prevent it)
+- [x] Classify which violated
+- [x] Display a fix for it (prevent it)
 
 Misc
 - [ ] Document the codes and how to use it
@@ -40,8 +41,8 @@ Requests, BeautifulSoup4, Argparse
 1. Download Xampp and install https://www.apachefriends.org/index.html
 2. Start Apache & SQL server from XAMPP launcher
 3. Download the Damn Vulnerable Web Application (DVWA) from http://www.dvwa.co.uk/
-4. Move DVWA code to the htdocs folder in xampp so that the new path is now as xampp/htdocs/dvwa
-4. For start, we will set DVWA to the lowest settings to ensure our codes work. Follow the README inside the downloaded DVWA folder
+4. Move DVWA code to the `c:\\xamp\htdocs` folder in xampp so that the new path is now as `c:\\xampp\htdocs\dvwa`
+4. For start, we will set DVWA to the lowest settings to ensure our codes work. Follow the README inside the downloaded DVWA folder to setup the database.
 5. Happy coding
 
 ### Usage
@@ -49,17 +50,17 @@ Requests, BeautifulSoup4, Argparse
 This will run at test of active and passive sql injections as well as bruteforce logins
 
 `$ python3 main.py -h`
-This will print out the usage of python and how to use it
+This will print out the usage of python and how to use it. 
 
-`$ python3 main.py -u <URL> -v <Vulnerability Type>`
+`$ python3 main.py -v <Vulnerability Type> -u <URL> -f <OPTIONAL FILE>`
 
-`$ python3 main.py -u http://localhost/dvwa/ -v BRUTE`
+`$ python3 main.py -v BRUTE -u http://localhost/dvwa/`
 It will brute force the login, and prints out the username/password
 
-`$ python3 main.py -u http://localhost/dvwa -v DIR-TRA`
+`$ python3 main.py  -v DIR-TRA -u http://localhost/dvwa`
 It will check for unathorized folder/file access
 
-`$ python3 main.py -u http://localhost/dvwa -v XSS`
+`$ python3 main.py -v XSS -u http://localhost/dvwa`
 It will check for possible XSS weaknesses (Stored and Reflected) 
 
 ### Credits (+URL)
