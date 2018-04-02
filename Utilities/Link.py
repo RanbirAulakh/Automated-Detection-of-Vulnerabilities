@@ -1,5 +1,3 @@
-from Utilities import Input
-
 class Link(object):
 
     """
