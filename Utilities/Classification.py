@@ -62,6 +62,10 @@ class Classification:
 				return severityRisk1, severityRisk2, "HIGH"
 
 	def vulnerabilityInfo():
+		"""
+		Return a dictionary that contains relevant information related to vulnerabilities
+		:return: info
+		"""
 		dataDict = OrderedDict()
 
 		BRUTE_DICT = {"Links":["Brute Force Attack Info: https://www.owasp.org/index.php/Brute_force_attack",

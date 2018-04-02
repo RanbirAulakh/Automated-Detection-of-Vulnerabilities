@@ -12,4 +12,8 @@ class Requests(object):
         self.request = requests.Session()
 
     def request(self):
+        """
+        Get request cookies, session, any info related to Request
+        :return: request page
+        """
         return self.request
