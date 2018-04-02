@@ -5,6 +5,8 @@ from Attacks.BruteForce import BruteForce
 from Attacks.DirectoriesFilesTraversal import DirectoriesFilesTraversal
 from Attacks.PassiveSQLInjection import PassiveSQLInjection
 from Attacks.ActiveSQLInjection import ActiveSQLInjection
+from Attacks.XSS import XSS
+from Attacks.Fuzz import Fuzzer
 from Utilities.Requests import Requests
 from Utilities.Classification import Classification
 
@@ -100,7 +102,20 @@ def main():
 	elif args.vulnerability == "P-SQL":
 		print("NOT IMPLEMENTED YET!")
 	elif args.vulnerability == "XSS":
-		print("NOT IMPLEMENTED YET!")
+		x = XSS(request)
+		fuzz = Fuzzer(request)
+		fuzz.discover(url)
+		xRf = x.attackReflect(fuzz.get_fuzz_links())
+		xStr = x.attackStored(fuzz.get_fuzz_links())
+		
+		print("\nXSS STATS\n=========")
+		print("Vulnerable? ")
+		print("URL: " + args.url)
+		print("After XSS Injection URL: " + url)
+		"""if(xRf == 1 or xStr == 1):
+            		classification.vulnerability("XSS")
+		print("Score: {}".format(1))
+		print("Security Principles Violation: Lack of Sanitation")"""
 	elif args.vulnerability == "CSRF":
 		print("NOT IMPLEMENTED YET!")
 
