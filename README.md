@@ -33,7 +33,7 @@ Misc
 Python 3
 
 #### Dependencies
-Requests, BeautifulSoup4, Argparse
+Requests, BeautifulSoup4, Argparse, url-normalize
 
 `pip3 install requests beautifulsoup4 argparse`
 
