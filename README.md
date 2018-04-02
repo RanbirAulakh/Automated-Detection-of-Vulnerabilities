@@ -59,6 +59,9 @@ It will brute force the login, and prints out the username/password
 `$ python3 main.py -u http://localhost/dvwa -v DIR-TRA`
 It will check for unathorized folder/file access
 
+`$ python3 main.py -u http://localhost/dvwa -v XSS`
+It will check for possible XSS weaknesses (Stored and Reflected) 
+
 ### Credits (+URL)
 
 filenames.txt/directories.txt
