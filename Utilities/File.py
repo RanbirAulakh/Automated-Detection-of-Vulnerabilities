@@ -11,6 +11,11 @@ class File(object):
         self.directory = os.path.abspath(os.path.join(__file__ ,"../.."))
 
     def openFile(self,filename):
+        """
+        Opens the file and return the content of the file
+        :param filename: file name
+        :return: content inside file
+        """
         path = self.directory + "/Files/" + filename
         if not os.path.isfile(path):
             raise Exception("We were not able to located the file " + filename + " at the following path "+path)
