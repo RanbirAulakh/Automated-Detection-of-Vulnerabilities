@@ -42,7 +42,8 @@ class XSS(object):
 					#Check to see if the script was stored in html as-is without sanitization
 					if vector.rstrip() in query.text.lower():
 						print("XSS Stored Vulnerability found\n")
-		return
+						return 1
+		return 0
         
 	def attackReflect(self, links):
 		print("TESTING REFLECTED XSS ATTACK")
@@ -82,6 +83,7 @@ class XSS(object):
 				#print(query.text)
 					if testScript.rstrip() in query.text.lower():
 						print("XSS Reflected Vulnerability found")
-		return
+						return 1
+		return 0
 			
 			
