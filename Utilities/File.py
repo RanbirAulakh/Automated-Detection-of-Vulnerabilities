@@ -40,3 +40,6 @@ class File(object):
 
     def getFilesLinks(self):
         return self.openFile('filenames.txt')
+
+    def getXSSScripts(self):
+        return self.openFile('XSSAttacks.txt')
