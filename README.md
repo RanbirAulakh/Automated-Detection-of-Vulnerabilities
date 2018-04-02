@@ -50,8 +50,9 @@ Requests, BeautifulSoup4, Argparse, url-normalize
 This will run at test of active and passive sql injections as well as bruteforce logins
 
 `$ python3 main.py -h`
-This will print out the usage of python and how to use it.
+This will print out the usage of python and how to use it. See below...
 
+```
 usage: main.py [-h] -v  -u  [-f FILE] [-d]
 
 optional arguments:
@@ -59,7 +60,7 @@ optional arguments:
   -v , --vulnerability
                         Vulnerabilities Choices. See below...
   -u , --url            Website you want to attack
-  -f FILE, --file FILE  Specific textfiles to use for attacking. Otherwise will use defaults.
+  -f , --file   Specific textfiles to use for attacking. Otherwise will use defaults.
   -d, --debug           Enabled Debugging, otherwise Info
 
 Vulnerability supports the following (multiple vulnerabilities? seperate by comma):
@@ -70,7 +71,7 @@ Vulnerability supports the following (multiple vulnerabilities? seperate by comm
 	CSRF		- Cross Site Forgery
 	DIR-TRA		- Directories/Files Traversal (Failure to restrict files, folders, and URL access)
 
-
+```
 
 `$ python3 main.py -v <Vulnerability Type> -u <URL> -f <OPTIONAL FILE> -d <OPTIONAL DEBUG>`
 
