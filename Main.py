@@ -10,11 +10,12 @@ from Attacks.Fuzz import Fuzzer
 from Utilities.Requests import Requests
 from Utilities.Classification import Classification
 from timeit import default_timer as timer
+from collections import OrderedDict
 
 def choicesDescriptions():
 	return """
 Vulnerability supports the following (multiple vulnerabilities? seperate by comma):
-	ALL			- Execute all vulnerabilities listed below
+	ALL		- Execute all vulnerabilities listed below
 	BRUTE		- Brute Force Every Possible Inputs (LOGIN)
 	A-SQL		- Active SQL Injection
 	P-SQL		- Passive SQL Injection
@@ -24,7 +25,6 @@ Vulnerability supports the following (multiple vulnerabilities? seperate by comm
 	"""
 
 def main():
-	logging.basicConfig(format="%(asctime)s - %(levelname)s %(message)s", level = logging.INFO)
 
 	parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter, epilog=choicesDescriptions())
 	parser.add_argument(
@@ -45,7 +45,18 @@ def main():
 		metavar='',
 	   required=False
 	)
+	parser.add_argument(
+	   "-d", '--debug',
+	   help='Enabled Debugging, otherwise Info',
+	   required=False,
+		action="store_true"
+	)
 	args = parser.parse_args()
+
+	if args.debug:
+		logging.basicConfig(format="%(asctime)s - %(levelname)s %(message)s", level = logging.DEBUG)
+	else:
+		logging.basicConfig(format="%(asctime)s - %(levelname)s %(message)s", level = logging.INFO)
 
 	url = args.url
 	vul = args.vulnerability
@@ -61,29 +72,29 @@ def main():
 		choicesDescriptions()
 		sys.exit(0)
 
+	boolData = OrderedDict({"BRUTE":{"bool": False, "name":"Brute Force"},
+							"DIR-TRA":{"bool": False,"name":"Directories/Files Traversal"},
+							"A-SQL":{"bool": False, "name":"Active SQL Injection"},
+							"P-SQL":{"bool": False, "name":"Passive SQL Injection"},
+							"XSS":{"bool": False, "name":"Cross-Site Scripting (XSS)"},
+							"CSRF":{"bool": False, "name":"Cross Site Forgery (CSRF)"}})
+	data = OrderedDict({"BRUTE":"", "DIR-TRA":"", "A-SQL":"", "P-SQL":"", "XSS":"", "CSRF":""})
+
 	for i in args.vulnerability.split(","):
 		i = i.strip()
 		if i == "DIR-TRA":
 			start = timer()
+			logging.info("Starting to search for any access to directories and files...")
 			dft = DirectoriesFilesTraversal(url, request)
 			directoriesLst, filesLst = dft.startScanningDirectoriesFiles()
 			end = timer()
-			print("\nDirectories & Files Traversal\n=========")
 
 			if(len(directoriesLst) > 0 or len(filesLst) > 0):
-				if(len(directoriesLst) > 0):
-					print("Directories\n--------")
-					for link in directoriesLst:
-						print("--- " + link)
-				if(len(filesLst) > 0):
-					print("Files\n--------")
-					for link in filesLst:
-						print("--- " + link)
-				classification.vulnerability(i)
+				boolData[i]["bool"] = True
+				data[i] = {"Directories\n--------": directoriesLst, "Files\n--------": filesLst,
+							"--- Completed in %.3f ms" % (end - start): ""}
 			else:
-				print("Nothing found!")
-
-			print("--- Completed in %.3f ms" % (end - start))
+				logging.info("Nothing found when performing a traversal directories or files!")
 
 		elif i == "BRUTE":
 			start = timer()
@@ -92,39 +103,46 @@ def main():
 			flag, username, password, new_url = b.startBruteForce()
 			end = timer()
 
-			print("\nBrute Force Stats\n==================")
-			print("Cracked? " + str(flag))
+			logging.info("Brute Force Cracked? " + str(flag))
 
 			if flag:
-				print("Before URL: " + url)
-				print("After Login URL: " + new_url)
-				print("Username: " + username)
-				print("Password: " + password)
-				classification.vulnerability(i)
-
-			print("--- Completed in %.3f ms" % (end - start))
+				boolData[i]["bool"] = True
+				data[i] = {"Cracked?":str(flag), "Before URL:":url, "After Login URL:": new_url, "Username:":username,
+						   "Password:":password, "--- Completed in %.3f ms" % (end - start):""}
 
 		elif i == "A-SQL":
-			print("NOT IMPLEMENTED YET!")
+			logging.error("NOT IMPLEMENTED YET!")
+
 		elif i == "P-SQL":
-			print("NOT IMPLEMENTED YET!")
+			logging.error("NOT IMPLEMENTED YET!")
+
 		elif i == "XSS":
 			x = XSS(request)
 
 			xRf = x.attackReflect(fuzz.get_fuzz_links())
 			xStr = x.attackStored(fuzz.get_fuzz_links())
 
-			print("\nXSS STATS\n=========")
+			if xRf == 1 or xStr == 1:
+				boolData[i]["bool"] = True
+				data[i] = {"Vulnerability Found":True}
 
-			print("URL: " + args.url)
-			print("After XSS Injection URL: " + url)
-			if(xRf == 1 or xStr == 1):
-				classification.vulnerability(i)
-			#else:
-				#print("No issues detected")
 		elif i == "CSRF":
-			print("NOT IMPLEMENTED YET!")
+			logging.error("NOT IMPLEMENTED YET!")
 
+	for i in data:
+		if data[i] != "":
+			if boolData[i]["bool"]:
+				print("\n" + boolData[i]["name"] + " Stats\n==================")
+				for j in data[i]:
+					if type(data[i][j]) is list:
+						print(j)
+						for x in data[i][j]:
+							print(x)
+					else:
+						print("{0} {1}".format(j, data[i][j]))
+				classification.vulnerability(i, boolData[i]["name"])
+			else:
+				print("This vulnerability, {0}, does not exist!".format(boolData[i]["name"]))
 
 
 

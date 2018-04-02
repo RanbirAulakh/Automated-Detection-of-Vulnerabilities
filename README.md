@@ -4,7 +4,7 @@
 
 - [x] Phrase 1 - Feb 9th, 2018
 - [x] Phrase 2 - March 9th, 2018
-- [ ] Phrase 3 - April 2nd, 2018
+- [x] Phrase 3 - April 2nd, 2018
 - [ ] Phrase 4 - April 13th, 2018
 - [ ] Phrase 5 - April 23rd, 2018
 
@@ -25,8 +25,8 @@ Create a command line style program
 - [x] Display a fix for it (prevent it)
 
 Misc
-- [ ] Document the codes and how to use it
-- [ ] Follow Object Oriented Programming (OOP) standard
+- [x] Document the codes and how to use it
+- [x] Follow Object Oriented Programming (OOP) standard
 
 ### Requirements
 #### Languages
@@ -35,7 +35,7 @@ Python 3
 #### Dependencies
 Requests, BeautifulSoup4, Argparse, url-normalize
 
-`pip3 install requests beautifulsoup4 argparse`
+`pip3 install requests beautifulsoup4 argparse url-normalize`
 
 ### Project & Environment setup
 1. Download Xampp and install https://www.apachefriends.org/index.html
@@ -50,9 +50,29 @@ Requests, BeautifulSoup4, Argparse, url-normalize
 This will run at test of active and passive sql injections as well as bruteforce logins
 
 `$ python3 main.py -h`
-This will print out the usage of python and how to use it. 
+This will print out the usage of python and how to use it.
 
-`$ python3 main.py -v <Vulnerability Type> -u <URL> -f <OPTIONAL FILE>`
+usage: main.py [-h] -v  -u  [-f FILE] [-d]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v , --vulnerability
+                        Vulnerabilities Choices. See below...
+  -u , --url            Website you want to attack
+  -f FILE, --file FILE  Specific textfiles to use for attacking. Otherwise will use defaults.
+  -d, --debug           Enabled Debugging, otherwise Info
+
+Vulnerability supports the following (multiple vulnerabilities? seperate by comma):
+	BRUTE		- Brute Force Every Possible Inputs (LOGIN)
+	A-SQL		- Active SQL Injection
+	P-SQL		- Passive SQL Injection
+	XSS		- Cross Site Scripting
+	CSRF		- Cross Site Forgery
+	DIR-TRA		- Directories/Files Traversal (Failure to restrict files, folders, and URL access)
+
+
+
+`$ python3 main.py -v <Vulnerability Type> -u <URL> -f <OPTIONAL FILE> -d <OPTIONAL DEBUG>`
 
 `$ python3 main.py -v BRUTE -u http://localhost/dvwa/`
 It will brute force the login, and prints out the username/password
@@ -62,6 +82,12 @@ It will check for unathorized folder/file access
 
 `$ python3 main.py -v XSS -u http://localhost/dvwa`
 It will check for possible XSS weaknesses (Stored and Reflected) 
+
+`$ python3 main.py -v BRUTE,XSS -u http://localhost/dvwa`
+It will brute force the login and check for possible XSS weaknesses (Stored and Reflected). Supports multiple vulnerabilities, seperate them by comma
+
+`$ python3 main.py -v BRUTE -u http://localhost/dvwa -d`
+It will brute force the login, and prints out the username/password. At the same time, it will enable debugging. 
 
 ### Credits (+URL)
 

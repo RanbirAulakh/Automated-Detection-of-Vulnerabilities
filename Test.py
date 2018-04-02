@@ -6,7 +6,6 @@ from Attacks.XSS import XSS
 from timeit import default_timer as timer
 from Attacks.BruteForce import BruteForce
 from Utilities import Link
-from Attacks.crawler import Crawl
 
 # import requests
 # import Link.Link as LinkClass
