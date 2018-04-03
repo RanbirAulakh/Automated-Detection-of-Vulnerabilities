@@ -1,5 +1,6 @@
 from Utilities.Requests import Requests
 from Utilities.File import File
+import logging
 
 class XSS(object):
 	
@@ -10,8 +11,13 @@ class XSS(object):
 		
 	#Takes in list of inputs that can be modified to store information
 	def attackStored(self, links):
+		"""
+		Go through every form on links given, then execute malicious code.
+		:param links: website URL
+		:return: vulnerability found
+		"""
 		self.links = links
-		print("TESTING STORED XSS ATTACK")
+		logging.info("Performing stored XSS attack")
 		vectors = self.file.getXSSScripts()
 		#self.forms = forms
 		if self.links:
@@ -35,18 +41,23 @@ class XSS(object):
 				
 				
 					#Submit and test payload
-					print(payload)
+					logging.debug(payload)
 					query = self.request.post(url,data=payload)
 					#print(query.url)
-                
 					#Check to see if the script was stored in html as-is without sanitization
 					if vector.rstrip() in query.text.lower():
-						print("XSS Stored Vulnerability found\n")
+						logging.info("XSS Stored Vulnerability found!")
 						return 1
+		logging.info("No vulnerability in XSS stored!")
 		return 0
         
 	def attackReflect(self, links):
-		print("TESTING REFLECTED XSS ATTACK")
+		"""
+		Go through every form on links given, then execute malicious code.
+		:param links: website URL
+		:return: vulnerability found
+		"""
+		logging.info("Performing reflect XSS attack")
 		self.links = links
 		vectors = self.file.getXSSScripts()
 		#Load in examples of XSS scripts from some file, much like the Active SQL
@@ -75,15 +86,16 @@ class XSS(object):
 							payload[name] = value
 				
 				#Submit and test payload
-					print(payload)
+					logging.debug(payload)
 					query = self.request.post(url,data=payload)
-					print(query.url)
-                
+					logging.debug(query.url)
 				#Check for script execution? 
 				#print(query.text)
 					if testScript.rstrip() in query.text.lower():
-						print("XSS Reflected Vulnerability found")
+						logging.info("XSS Reflected Vulnerability found")
 						return 1
+
+		logging.info("No vulnerability in XSS reflected!")
 		return 0
 			
 			

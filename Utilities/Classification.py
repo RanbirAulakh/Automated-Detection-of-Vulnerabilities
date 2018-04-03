@@ -17,7 +17,7 @@ class Classification:
 	private/sentitive. We will just give an estimate score.
 
 	"""
-	def determineRisk(ciaScore, vulScore):
+	def determineRisk(self, ciaScore, vulScore):
 		"""
 		Determine the risk and return 3 results, not the best logic, but works flawlessly
 		:param vulScore: mean of VulScore
@@ -61,7 +61,7 @@ class Classification:
 			if severityRisk2 == "MEDIUM":
 				return severityRisk1, severityRisk2, "HIGH"
 
-	def vulnerabilityInfo():
+	def vulnerabilityInfo(self):
 		"""
 		Return a dictionary that contains relevant information related to vulnerabilities
 		:return: info
@@ -96,7 +96,7 @@ class Classification:
 
 		return dataDict
 
-	def vulnerability(self, name):
+	def vulnerability(self, name, fullName):
 		"""
 		Determine the score for each vulnerability
 
@@ -162,18 +162,20 @@ class Classification:
 		# determine the risk
 		meanCiaScore = statistics.mean(cia_score)
 		meanVulScore = statistics.mean(vulnerability_score)
-		severityRisk1, severityRisk2, totalRisk = Classification.determineRisk(meanCiaScore, meanVulScore)
+		severityRisk1, severityRisk2, totalRisk = Classification.determineRisk(self, meanCiaScore, meanVulScore)
 
 		print("\nRating and Impact:\n===================")
 		print("Likelihood: {0} - {1}".format(meanVulScore, severityRisk2))
 		print("Impact: {0} - {1}".format(meanCiaScore, severityRisk1))
 		print("Overall Risk: {0}".format(totalRisk))
 
-		print("\nMore Information about attacks and how to fix it:\n==================================================")
+		print("\nMore Information about " + fullName + " and how to fix it:\n==================================================")
 
 		"""
 			Dictionary that contains vulnerability information, if it's true, prints it
 		"""
-		dataDict = Classification.vulnerabilityInfo()
+		dataDict = Classification.vulnerabilityInfo(self)
 		for i in dataDict[name]["Links"]:
 			print(i)
+
+		print("\n\n")
