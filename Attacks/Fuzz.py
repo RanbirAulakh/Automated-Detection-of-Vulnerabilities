@@ -36,6 +36,18 @@ class Fuzzer(object):
             "link": "href",
         }
 
+        self.extensions = {
+            ".php",
+            ".js",
+            ".php3",
+            ".shtml",
+            ".shtm",
+            ".asp"
+            ".asp.net",
+            ".cfm",
+
+        }
+
         self.domain = None
 
     def display_msg_and_terminate(msg):
@@ -70,7 +82,7 @@ class Fuzzer(object):
     def discover(self,url,limit=50):
         #ensure only valid url are allowed
         self.validate_url(url)
-        self.domain = url
+        self.domain = self.strip_index(url)
         self.toCrawl.append(url)
 
         self.crawler(url,limit)
@@ -178,6 +190,18 @@ class Fuzzer(object):
 
         #print(self.links)
 
+    def strip_index(self,url):
+        for ext in self.extensions:
+            index = "index"+ext
+            index = index.lower()
+            url = url.lower()
+
+            if index in url:
+                url = url.replace(index,"")
+
+        return url
+
+
     def is_internal_link(self,url):
         return self.domain in url
 
@@ -186,6 +210,10 @@ class Fuzzer(object):
             self.display_msg_and_terminate("You must supply an link to use the canonicalize_url function")
 
         if 'https://' not in link and 'http://' not in link:
+
+            #clean up the parent link if need
+            parentUrl = self.strip_index(parentUrl)
+
             if link.startswith('/'):
                 link = link[1:]
 
@@ -199,10 +227,12 @@ class Fuzzer(object):
         logging.debug("Internal Links")
         for internal in self.internalLinks:
             logging.debug(internal)
+            print(internal)
         logging.info("# of Internal Links: " + str(len(self.internalLinks)))
 
         logging.debug("\nExternal Links")
         for external in self.externalLinks:
+            print(external)
             logging.debug(external)
         logging.info("# of External Links: " + str(len(self.externalLinks)))
 

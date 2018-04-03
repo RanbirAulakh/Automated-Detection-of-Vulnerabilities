@@ -11,9 +11,9 @@ class PassiveSQLInjection(object):
 	def __init__(self,request):
 		self.file = File()
 		self.request = request
-
 		self.sql_errors = {"sql syntax","syntax error","Unclosed quotation mark","Drivers error","Client error","Unknown column"}
 		self.vectors = self.file.getPassiveSQLInjectionVector()
+		self.inject_vulnerabilities_list = []
 
 
 	def attack(self,links):
@@ -34,6 +34,9 @@ class PassiveSQLInjection(object):
 					for vector in self.vectors:
 						payload = self.make_post_payload(payload,inputs,vector)
 						self.has_sql_injection_vulnerability(payload,url)
+
+						#not a get based but go ahead and try if we can get vul this way either
+						self.has_sql_injection_vulnerability(payload,url,"get")
 
 
 						#do the get based have a sql vulnerability?
@@ -62,7 +65,7 @@ class PassiveSQLInjection(object):
 										payload[name] = vector
 
 
-									self.has_sql_injection_vulnerability(payload,url)
+									self.has_sql_injection_vulnerability(payload,url,"get")
 								
 
 	def is_get_based_url(self,url):
@@ -75,7 +78,7 @@ class PassiveSQLInjection(object):
 
 		return False
 
-	def has_sql_injection_vulnerability(self,payload,url,method="post"):
+	def has_sql_injection_vulnerability(self,payload,url,method="post",skip_login=True):
 		if not url or not method:
 			print("The parameter method and payload cannot be empty!")
 			exit()
@@ -89,6 +92,9 @@ class PassiveSQLInjection(object):
 		if not payload:
 			return False
 
+		if skip_login and "login" in url.lower():
+			return False
+
 		if method=="post":
 			query = self.request.post(url,data=payload)
 		else:
@@ -100,11 +106,11 @@ class PassiveSQLInjection(object):
 		res = query.text.strip().lower()
 
 		if res:
-			print(res)
 			for err in self.sql_errors:
 				err = err.strip().lower()
 				if err in res:
-					print("SQL injection founded!")
+					vul = "url:"+url+"\npayload:"+str(payload)
+					self.inject_vulnerabilities_list.append(vul)
 					return True
 
 		return False
@@ -122,6 +128,13 @@ class PassiveSQLInjection(object):
 				payload[name] = value
 
 		return payload
+
+
+	def sql_injection_result(self):
+		if self.inject_vulnerabilities_list:
+			print("Found "+ str(len(self.inject_vulnerabilities_list)) + " passive sql injection potientials")
+			for vul in self.inject_vulnerabilities_list:
+				print(vul)
 
 
 
