@@ -87,12 +87,17 @@ class Classification:
 		DIR_TRA = {"Links":["Directory Traversal/File Attack Info: https://www.owasp.org/index.php/Path_Traversal",
 							"Directory Traversal/File Fix (Prevention): https://www.owasp.org/index.php/File_System#Path_traversal"]}
 
+		SENSITIVE = {"Links":["Sensitive Files Disclosure Info: https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure",
+							  "Sensitive Files Disclosure (Prevention) OWASP: https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure"
+							"Sensitive Files Disclosure (Prevention) - External: https://hdivsecurity.com/owasp-sensitive-data-exposure"]}
+
 		dataDict["BRUTE"] = BRUTE_DICT
 		dataDict["A-SQL"] = A_SQL
 		dataDict["P-SQL"] = P_SQL
 		dataDict["XSS"] = XSS
 		dataDict["CSRF"] = CSRF
 		dataDict["DIR-TRA"] = DIR_TRA
+		dataDict["SENSITIVE"] = SENSITIVE
 
 		return dataDict
 
@@ -159,12 +164,16 @@ class Classification:
 			cia_score = [3, 1, 5]
 			vulnerability_score = [9, 9, 9, 5]
 
+		elif name == "SENSITIVE":
+			cia_score = [1, 1, 3]
+			vulnerability_score = [3, 1, 1, 5]
+
 		# determine the risk
 		meanCiaScore = statistics.mean(cia_score)
 		meanVulScore = statistics.mean(vulnerability_score)
 		severityRisk1, severityRisk2, totalRisk = Classification.determineRisk(self, meanCiaScore, meanVulScore)
 
-		print("\nRating and Impact:\n===================")
+		print("\n" + fullName + " Rating and Impact:\n===================")
 		print("Likelihood: {0} - {1}".format(meanVulScore, severityRisk2))
 		print("Impact: {0} - {1}".format(meanCiaScore, severityRisk1))
 		print("Overall Risk: {0}".format(totalRisk))

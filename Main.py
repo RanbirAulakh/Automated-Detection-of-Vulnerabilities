@@ -11,6 +11,7 @@ from Utilities.Requests import Requests
 from Utilities.Classification import Classification
 from timeit import default_timer as timer
 from collections import OrderedDict
+from Attacks.Sensitive import Sensitive
 
 def choicesDescriptions():
 	return """
@@ -60,6 +61,9 @@ def main():
 
 	url = args.url
 	vul = args.vulnerability
+	fFile = args.file
+
+	print(fFile)
 
 	request = Requests()
 	request = request.request
@@ -81,8 +85,12 @@ def main():
 							"A-SQL":{"bool": False, "name":"Active SQL Injection"},
 							"P-SQL":{"bool": False, "name":"Passive SQL Injection"},
 							"XSS":{"bool": False, "name":"Cross-Site Scripting (XSS)"},
+							"SENSITIVE":{"bool": False, "name":"Sensitive Files Disclosure"},
 							"CSRF":{"bool": False, "name":"Cross Site Forgery (CSRF)"}})
-	data = OrderedDict({"BRUTE":"", "DIR-TRA":"", "A-SQL":"", "P-SQL":"", "XSS":"", "CSRF":""})
+	data = OrderedDict({"BRUTE":"", "DIR-TRA":"", "A-SQL":"", "P-SQL":"", "XSS":"", "CSRF":"", "SENSITIVE":""})
+
+	if fFile is not None and len(args.vulnerability.split(",")) > 0:
+		logging.error("Only use --file (-f) command for specific vulnerability!")
 
 	for i in args.vulnerability.split(","):
 		i = i.strip()
@@ -121,17 +129,37 @@ def main():
 			logging.error("NOT IMPLEMENTED YET!")
 
 		elif i == "XSS":
+			start = timer()
 			x = XSS(request)
 
 			xRf = x.attackReflect(fuzz.get_fuzz_links())
 			xStr = x.attackStored(fuzz.get_fuzz_links())
+			end = timer()
 
 			if xRf == 1 or xStr == 1:
 				boolData[i]["bool"] = True
-				data[i] = {"Vulnerability Found":True}
+				data[i] = {"Vulnerability Found":True, "--- Completed in %.3f ms" % (end - start):""}
 
 		elif i == "CSRF":
 			logging.error("NOT IMPLEMENTED YET!")
+
+		elif i == "SENSITIVE":
+			start = timer()
+			fuzz.print_discovered_links()
+
+			links = fuzz.get_fuzz_links()
+
+			sensitive = Sensitive(links)
+			sensitive.search()
+			sensitiveLst = sensitive.display_sensitive_search_result()
+			end = timer()
+
+			if len(sensitiveLst) > 0:
+				boolData[i]["bool"] = True
+				data[i] = {"Sensitive List:":sensitiveLst, "--- Completed in %.3f ms" % (end - start):""}
+
+		else:
+			logging.error(i + " is an invalid command!")
 
 	for i in data:
 		if data[i] != "":
