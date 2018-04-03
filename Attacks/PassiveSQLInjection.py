@@ -12,6 +12,9 @@ class PassiveSQLInjection(object):
 		self.file = File()
 		self.request = request
 
+		self.sql_errors = {"sql syntax","syntax error","Unclosed quotation mark","Drivers error","Client error","Unknown column"}
+		self.vectors = self.file.getPassiveSQLInjectionVector()
+
 
 	def attack(self,links):
 		print("TESTING PASSIVE SQL")
@@ -20,42 +23,105 @@ class PassiveSQLInjection(object):
 		:param links: a LINK class object with the inputs being an instance of beautiful soup
 		:return:
 		"""
-		self.links = links
-		vectors = self.file.getPassiveSQLInjectionVector()
 
-		if self.links:
+		if links:
 			for link in links:
 				payload = {}
-				url = link.getUrl()
-				inputs  = link.getInputs()
+				if link.getUrl():
+					url = link.getUrl().strip().lower()
+					#do we have input?
+					inputs = link.getInputs()
+					for vector in self.vectors:
+						payload = self.make_post_payload(payload,inputs,vector)
+						self.has_sql_injection_vulnerability(payload,url)
 
-				#prepare to load our attack vector in the empty inputs
-				for vector in vectors:
-					for input_tag in inputs:
-						if input_tag:
-							name = input_tag.get('name')
-							value = input_tag.get('value')
 
-							if not value:
-								value = vector
+						#do the get based have a sql vulnerability?
+						if self.is_get_based_url(url):
+							payload = {}
+							fields = url.split("?")
 
-							payload[name] = value
+							if fields:
+								parameters = []
+								url = fields[0]
+								attributes = fields[1]
 
-					
-					#submit the payload with the injected value
-					query = self.request.post(url,data=payload)
-					#print(query.text)
+								#multiple attributes?
+								if "&" in attributes:
+									parameters = attributes.split("&")
 
-					if "syntax" in query.text.lower():
-						print("SQL INJECTION VULNERABILITY FOUND")
-						print(payload)
+								#single attributes
+								else:
+									parameter = parameter.append(attributes)
 
-					#try get
-					query = self.request.get(url,data=payload)
+								for p in parameter:
+									attributes = p.split("=")
+									name = attributes[0]
+									
+									payload[name] = vector
 
-					if "syntax" in query.text.lower():
-						print("SQL INJECTION VULNERABILITY FOUND")
-						print(payload)
-				
+
+								self.has_sql_injection_vulnerability(payload,url):
+								
+
+	def is_get_based_url(self,url):
+		if not url:
+			return False
+
+		url = url.strip().lower()
+		if "?" in url:
+			return True
+
+		return False
+
+	def has_sql_injection_vulnerability(self,payload,url,method="post"):
+		if not url or not method:
+			print("The parameter method and payload cannot be empty!")
+			exit()
+
+		method = method.lower().strip()
+
+		if method!="post" and method!="get":
+			print("the parameter method must be get or post")
+			exit()
+
+		if not payload:
+			return False
+
+		if method=="post":
+			query = self.request.post(url,data=payload)
+		else:
+			query = query = self.request.get(url,data=payload)
+
+		if not query:
+			return False
+
+		res = query.text.strip().lower()
+
+		if res:
+			print(res)
+			for err in self.sql_errors:
+				err = err.strip().lower()
+				if err in res:
+					print("SQL injection founded!")
+					return True
+
+		return False
+
+
+	def make_post_payload(self,payload,inputs,vector):
+		if inputs:
+			for input_tag in inputs:
+				name = input_tag.get('name')
+				value = input_tag.get('value')
+
+				if not value:
+					value = vector
+
+				payload[name] = value
+
+		return payload
+
+
 
 			

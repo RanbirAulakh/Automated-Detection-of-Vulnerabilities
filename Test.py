@@ -31,27 +31,32 @@ logging.basicConfig(format="%(asctime)s - %(levelname)s %(message)s", level = lo
 request = Requests()
 request = request.request
 url = "http://localhost/dvwa"
-"""
+
+
 b = BruteForce(url, request)
 flag, username, password, url = b.startBruteForce()
-"""
+
+
 
 fuzz = Fuzzer(request)
 #fuzz.restrict_domain(url)
 fuzz.discover(url)
+"""
 fuzz.print_discovered_links()
 
 links = fuzz.get_fuzz_links()
-
 """
+
+
 p_sql = PassiveSQLInjection(request)
 links = fuzz.get_fuzz_links()
 p_sql.attack(links)
-"""
 
+"""
 sensitive = Sensitive(links)
 sensitive.search()
 sensitive.display_sensitive_search_result()
+"""
 
 
 

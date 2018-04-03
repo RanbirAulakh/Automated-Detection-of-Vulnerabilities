@@ -67,13 +67,13 @@ class Fuzzer(object):
             self.display_msg_and_terminate(err)
 
 
-    def discover(self,url):
+    def discover(self,url,limit=50):
         #ensure only valid url are allowed
         self.validate_url(url)
         self.domain = url
         self.toCrawl.append(url)
 
-        self.crawler(url)
+        self.crawler(url,limit)
 
     def return_path_last_directory(self,url):
         if url:
@@ -93,13 +93,13 @@ class Fuzzer(object):
 
 
 
-    def crawler(self,url):
+    def crawler(self,url,limit=50):
         logging.info("Fuzz/Crawling...")
         self.validate_url(url) #the very first url must be a valid url
         prevCrawled = url
         count = 0
 
-        while self.toCrawl and count<self.limit:
+        while self.toCrawl and count<limit:
             
             #crawler is restrict to only crawl internal links
             if url not in self.crawled:
@@ -154,7 +154,7 @@ class Fuzzer(object):
 
                         #record the internal links(we are only interested in the success links)
                         if self.is_internal_link(url) and url not in self.internalLinks:
-                            #print(url)
+                            logging.info(url + " --> " + str(200))
                             self.internalLinks.append(url)
 
                 #record the external links
