@@ -65,7 +65,11 @@ def main():
 	request = request.request
 
 	fuzz = Fuzzer(request)
-	fuzz.discover(url)
+	try:
+		fuzz.discover(url)
+	except:
+		logging.error("Cannot connect to URL!")
+		sys.exit(0)
 
 	classification = Classification()
 	if vul is None or url is None:
