@@ -196,13 +196,15 @@ class Fuzzer(object):
 
     def print_discovered_links(self):
 
-        logging.info("Internal Links")
+        logging.debug("Internal Links")
         for internal in self.internalLinks:
-            logging.info(internal)
+            logging.debug(internal)
+        logging.info("# of Internal Links: " + str(len(self.internalLinks)))
 
-        logging.info("\nExternal Links")
+        logging.debug("\nExternal Links")
         for external in self.externalLinks:
-            logging.info(external)
+            logging.debug(external)
+        logging.info("# of External Links: " + str(len(self.externalLinks)))
 
     def parse_inputs(self,text):
         self.set_beautiful_soup(text)

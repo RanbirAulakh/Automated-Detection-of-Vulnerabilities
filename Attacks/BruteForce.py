@@ -29,6 +29,7 @@ class BruteForce(object):
         url = ""
 
         # only focusing on "Login" page
+        flag = False
         if("login" in r.url):
             textfile = File()
             textfile = textfile.getPossibleUserPass()

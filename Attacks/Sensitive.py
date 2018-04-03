@@ -1,6 +1,11 @@
 from Utilities.File import File
 from collections import defaultdict
+import logging
+
 class Sensitive(object):
+    """
+
+    """
 
     def __init__(self, links):
         self.links = links
@@ -11,6 +16,12 @@ class Sensitive(object):
 
 
     def sensitve_information_disclosure(self,vector,content):
+        """
+
+        :param vector:
+        :param content:
+        :return: if there is any information disclosed
+        """
         if content and vector:
             vector = vector.strip().lower()
             content = content.strip().lower()
@@ -22,6 +33,10 @@ class Sensitive(object):
 
 
     def search(self):
+        """
+        Search for sensitive keywords in a page
+        :return: None
+        """
         if self.links and self.vectors:
 
             for link in self.links:
@@ -43,13 +58,18 @@ class Sensitive(object):
 
 
     def display_sensitive_search_result(self):
+        """
+        Displays the results
+        :return: None
+        """
         if self.sensitive:
-            print("Sensitive breached result")
+            logging.info("Sensitive breached result")
         for breach in self.sensitive:
-            print("Vector "+ breach)
-            print("==================")
+            logging.info("Below are the vector breach: " + breach)
             for loc in self.sensitive.get(breach):
-                print(loc)
+                logging.info(loc)
+
+        return self.sensitive
 
 
 
