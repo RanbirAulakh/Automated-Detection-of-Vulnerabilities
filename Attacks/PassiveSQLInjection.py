@@ -52,16 +52,17 @@ class PassiveSQLInjection(object):
 
 								#single attributes
 								else:
-									parameter = parameter.append(attributes)
+									parameters = parameters.append(attributes)
 
-								for p in parameter:
-									attributes = p.split("=")
-									name = attributes[0]
-									
-									payload[name] = vector
+								if parameters:
+									for p in parameters:
+										attributes = p.split("=")
+										name = attributes[0]
+										
+										payload[name] = vector
 
 
-								self.has_sql_injection_vulnerability(payload,url):
+									self.has_sql_injection_vulnerability(payload,url)
 								
 
 	def is_get_based_url(self,url):
