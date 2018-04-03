@@ -6,7 +6,11 @@ from Attacks.XSS import XSS
 from timeit import default_timer as timer
 from Attacks.BruteForce import BruteForce
 from Utilities import Link
-from Attacks.crawler import Crawl
+from Attacks.Sensitive import Sensitive
+import logging
+
+logging.basicConfig(format="%(asctime)s - %(levelname)s %(message)s", level = logging.INFO)
+
 
 # import requests
 # import Link.Link as LinkClass
@@ -36,9 +40,16 @@ fuzz = Fuzzer(request)
 fuzz.discover(url)
 fuzz.print_discovered_links()
 
+links = fuzz.get_fuzz_links()
+
+"""
 p_sql = PassiveSQLInjection(request)
 links = fuzz.get_fuzz_links()
 p_sql.attack(links)
+"""
+
+sensitive = Sensitive(links)
+sensitive.search()
 
 
 

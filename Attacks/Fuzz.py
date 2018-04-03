@@ -197,14 +197,10 @@ class Fuzzer(object):
     def print_discovered_links(self):
 
         logging.info("Internal Links")
-        logging.info("==============")
-        logging.info()
         for internal in self.internalLinks:
             logging.info(internal)
 
-            logging.info("\nExternal Links")
-            logging.info("==============")
-            logging.info()
+        logging.info("\nExternal Links")
         for external in self.externalLinks:
             logging.info(external)
 

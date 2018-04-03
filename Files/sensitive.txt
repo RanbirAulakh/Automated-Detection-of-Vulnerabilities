@@ -3,7 +3,7 @@ admin
 credit card
 social security
 password
-phpinfo.php
+phpinfo
 .htaccess
 .config
 setting
