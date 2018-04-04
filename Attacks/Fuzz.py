@@ -50,7 +50,7 @@ class Fuzzer(object):
 
         self.domain = None
 
-    def display_msg_and_terminate(msg):
+    def display_msg_and_terminate(self,msg):
         if not msg:
             logging.error("You must supply a error message")
         
