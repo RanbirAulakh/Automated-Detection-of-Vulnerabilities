@@ -32,7 +32,12 @@ class CSRF(object):
 				inputs = link.getInputs()
 				url = link.getUrl().strip()
 				if inputs:
-					content = link.getContent()
+					content = ""
+					for input_tag in inputs:
+						name = input_tag.get("name")
+						if name:
+							content+=name
+
 					if content:
 						content = content.lower().strip()
 						self.has_csrf_token(content,url)
@@ -46,18 +51,22 @@ class CSRF(object):
 
 	def has_csrf_token(self,content,url,is_input=True):
 		if content:
+			protected = False
 			content = content.strip()
 			for token in self.tokens:
 				token = token.lower().strip()
-				if token not in content:
-					if is_input:
-						vul = "inputs at "+url+ " is missing csrf token"
-						if vul not in self.vuln_inputs:
-							self.vuln_inputs.append(vul)
-					else:
-						vul = "the url "+url+" parameters is missing csrf token"
-						if vul not in self.vuln_urls:
-							self.vuln_urls.append(vul)
+				if token in content:
+					protected = True
+			
+			if not protected:
+				if is_input:
+					vul = "inputs at "+url+ " is missing csrf token"
+					if vul not in self.vuln_inputs:
+						self.vuln_inputs.append(vul)
+				else:
+					vul = "the url "+url+" parameters is missing csrf token"
+					if vul not in self.vuln_urls:
+						self.vuln_urls.append(vul)
 
 
 	def csrf_protection_result(self):
