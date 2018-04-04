@@ -166,7 +166,7 @@ class Fuzzer(object):
 
                         #record the internal links(we are only interested in the success links)
                         if self.is_internal_link(url) and url not in self.internalLinks:
-                            logging.info(url + " --> " + str(200))
+                            logging.debug(url + " --> " + str(200))
                             self.internalLinks.append(url)
 
                 #record the external links
@@ -227,12 +227,10 @@ class Fuzzer(object):
         logging.debug("Internal Links")
         for internal in self.internalLinks:
             logging.debug(internal)
-            print(internal)
         logging.info("# of Internal Links: " + str(len(self.internalLinks)))
 
         logging.debug("\nExternal Links")
         for external in self.externalLinks:
-            print(external)
             logging.debug(external)
         logging.info("# of External Links: " + str(len(self.externalLinks)))
 

@@ -1,3 +1,5 @@
+import logging
+
 class CSRF(object):
 
 	links = None
@@ -19,14 +21,14 @@ class CSRF(object):
 
 	def add_token(self,token):
 		if not token:
-			print("Token cannot be empty!")
+			logging.error("Token cannot be empty!")
 			exit()
 
 		self.tokens.append(token)
 
 	def scan(self):
 		if self.links:
-			print("Scanning for csrf protection")
+			logging.info("Scanning for CSRF Protection...")
 			for link in self.links:
 				#only focus on those that have input parameters
 				inputs = link.getInputs()
@@ -71,10 +73,11 @@ class CSRF(object):
 
 	def csrf_protection_result(self):
 		if self.vuln_urls or self.vuln_inputs:
-			print("Found "+str(len(self.vuln_inputs) + len(self.vuln_urls)) + " potiential issue due to no csrf protection")
+			logging.info("Found "+ str(len(self.vuln_inputs) + len(self.vuln_urls)) + " potiential issue due to no csrf protection")
 			
 			for vul in self.vuln_inputs:
-				print(vul)
+				logging.debug(vul)
 			for vul in self.vuln_urls:
-				print(vul)
+				logging.debug(vul)
 
+		return self.vuln_urls, self.vuln_inputs

@@ -12,6 +12,7 @@ from Utilities.Classification import Classification
 from timeit import default_timer as timer
 from collections import OrderedDict
 from Attacks.Sensitive import Sensitive
+from Attacks.CSRF import CSRF
 
 def choicesDescriptions():
 	return """
@@ -40,12 +41,12 @@ def main():
 		metavar='',
 	   required=True
 	)
-	parser.add_argument(
-	   "-f", '--file',
-	   help='Specific textfiles to use for attacking. Otherwise will use defaults.',
-		metavar='',
-	   required=False
-	)
+	# parser.add_argument(
+	#    "-f", '--file',
+	#    help='Specific textfiles to use for attacking. Otherwise will use defaults.',
+	# 	metavar='',
+	#    required=False
+	# )
 	parser.add_argument(
 	   "-d", '--debug',
 	   help='Enabled Debugging, otherwise Info',
@@ -61,16 +62,16 @@ def main():
 
 	url = args.url
 	vul = args.vulnerability
-	fFile = args.file
-
-	print(fFile)
 
 	request = Requests()
 	request = request.request
 
 	fuzz = Fuzzer(request)
+
 	try:
 		fuzz.discover(url)
+		fuzz.print_discovered_links()
+		links = fuzz.get_fuzz_links()
 	except:
 		logging.error("Cannot connect to URL!")
 		sys.exit(0)
@@ -89,8 +90,9 @@ def main():
 							"CSRF":{"bool": False, "name":"Cross Site Forgery (CSRF)"}})
 	data = OrderedDict({"BRUTE":"", "DIR-TRA":"", "A-SQL":"", "P-SQL":"", "XSS":"", "CSRF":"", "SENSITIVE":""})
 
-	if fFile is not None and len(args.vulnerability.split(",")) > 0:
-		logging.error("Only use --file (-f) command for specific vulnerability!")
+	#if fFile is not None and len(args.vulnerability.split(",")) > 0:
+	#	logging.error("Only use --file (-f) command for specific vulnerability!")
+	#	sys.exit(0)
 
 	for i in args.vulnerability.split(","):
 		i = i.strip()
@@ -123,10 +125,51 @@ def main():
 						   "Password:":password, "--- Completed in %.3f ms" % (end - start):""}
 
 		elif i == "A-SQL":
-			logging.error("NOT IMPLEMENTED YET!")
+			start = timer()
+
+			b = BruteForce(url, request)
+			flag, username, password, url = b.startBruteForce()
+
+			fuzz = Fuzzer(request)
+			fuzz.discover(url)
+			fuzz.print_discovered_links()
+			links = fuzz.get_fuzz_links()
+
+			a_sql = ActiveSQLInjection(request)
+			links = fuzz.get_fuzz_links()
+			a_sql.attack(links)
+
+			inject_vulnerabilities_list = a_sql.sql_injection_result()
+			end = timer()
+
+			if len(inject_vulnerabilities_list) > 0:
+				boolData[i]["bool"] = True
+				data[i] = {"Active SQL Injection:\n--------":inject_vulnerabilities_list,
+						   "Password:":password, "--- Completed in %.3f ms" % (end - start):""}
 
 		elif i == "P-SQL":
-			logging.error("NOT IMPLEMENTED YET!")
+			start = timer()
+
+			b = BruteForce(url, request)
+			flag, username, password, url = b.startBruteForce()
+
+			fuzz = Fuzzer(request)
+			fuzz.discover(url)
+			fuzz.print_discovered_links()
+
+			links = fuzz.get_fuzz_links()
+			p_sql = PassiveSQLInjection(request)
+			links = fuzz.get_fuzz_links()
+			p_sql.attack(links)
+
+			inject_vulnerabilities_list = p_sql.sql_injection_result()
+
+			end = timer()
+
+			if len(inject_vulnerabilities_list) > 0:
+				boolData[i]["bool"] = True
+				data[i] = {"Passive SQL Injection:\n--------":inject_vulnerabilities_list,
+						   "Password:":password, "--- Completed in %.3f ms" % (end - start):""}
 
 		elif i == "XSS":
 			start = timer()
@@ -141,7 +184,28 @@ def main():
 				data[i] = {"Vulnerability Found":True, "--- Completed in %.3f ms" % (end - start):""}
 
 		elif i == "CSRF":
-			logging.error("NOT IMPLEMENTED YET!")
+			start = timer()
+
+			b = BruteForce(url, request)
+			flag, username, password, url = b.startBruteForce()
+
+			fuzz = Fuzzer(request)
+			fuzz.discover(url)
+			fuzz.print_discovered_links()
+			links = fuzz.get_fuzz_links()
+
+			csrf = CSRF(links)
+			csrf.scan()
+			vuln_urls, vuln_inputs = csrf.csrf_protection_result()
+
+			end = timer()
+
+			if len(vuln_urls) > 0 or len(vuln_inputs) > 0:
+				total_vuln = len(vuln_urls) + len(vuln_inputs)
+				boolData[i]["bool"] = True
+				data[i] = {"# of potiential issue due to no CSRF protection:":total_vuln,
+						   "Vulnerability URLS:\n--------":vuln_urls, "Vulnerability Inputs:\n--------":vuln_inputs,
+						   "--- Completed in %.3f ms" % (end - start):""}
 
 		elif i == "SENSITIVE":
 			start = timer()
@@ -170,6 +234,7 @@ def main():
 						print(j)
 						for x in data[i][j]:
 							print(x)
+						print("\n")
 					else:
 						print("{0} {1}".format(j, data[i][j]))
 				classification.vulnerability(i, boolData[i]["name"])

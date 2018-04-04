@@ -1,5 +1,6 @@
 from Utilities.Requests import Requests
 from Utilities.File import File
+import logging
 
 class ActiveSQLInjection(object):
 
@@ -17,7 +18,7 @@ class ActiveSQLInjection(object):
 
 
 	def attack(self,links):
-		print("TESTING Active SQL")
+		logging.info("Executing Active SQL Injection...")
 		"""
 		This function will attempt to perform the active sql injection
 		:param links: a LINK class object with the inputs being an instance of beautiful soup
@@ -80,13 +81,13 @@ class ActiveSQLInjection(object):
 
 	def has_sql_injection_vulnerability(self,payload,url,method="post",skip_login=True):
 		if not url or not method:
-			print("The parameter method and payload cannot be empty!")
+			logging.error("The parameter method and payload cannot be empty!")
 			exit()
 
 		method = method.lower().strip()
 
 		if method!="post" and method!="get":
-			print("the parameter method must be get or post")
+			logging.error("the parameter method must be get or post")
 			exit()
 
 		if not payload:
@@ -132,10 +133,8 @@ class ActiveSQLInjection(object):
 
 	def sql_injection_result(self):
 		if self.inject_vulnerabilities_list:
-			print("Found "+ str(len(self.inject_vulnerabilities_list)) + " active sql injection potientials")
+			logging.info("Found "+ str(len(self.inject_vulnerabilities_list)) + " active sql injection potientials")
 			for vul in self.inject_vulnerabilities_list:
-				print(vul)
+				logging.debug(vul)
 
-
-
-			
+		return self.inject_vulnerabilities_list

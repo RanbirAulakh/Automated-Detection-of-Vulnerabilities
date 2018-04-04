@@ -7,23 +7,10 @@ from timeit import default_timer as timer
 from Attacks.BruteForce import BruteForce
 from Utilities import Link
 from Attacks.Sensitive import Sensitive
-from Attacks.Csrf import CSRF
+from Attacks.CSRF import CSRF
 import logging
 
 logging.basicConfig(format="%(asctime)s - %(levelname)s %(message)s", level = logging.INFO)
-
-# import requests
-# import Link.Link as LinkClass
-#
-# r = requests.get("URL")
-#
-# link = LinkClass.Link()
-#
-#
-#
-#
-#
-# print(r.text)
 
 """"
     PERFORM A UNIT TEST ON BRUTE FORCE, ACTIVE AND PASSIVE SQL
@@ -37,13 +24,11 @@ url = "http://localhost/dvwa"
 b = BruteForce(url, request)
 flag, username, password, url = b.startBruteForce()
 
-
-
 fuzz = Fuzzer(request)
-#fuzz.restrict_domain(url)
 fuzz.discover(url)
 fuzz.print_discovered_links()
 links = fuzz.get_fuzz_links()
+
 """
 fuzz.print_discovered_links()
 
@@ -64,17 +49,17 @@ sensitive.search()
 sensitive.display_sensitive_search_result()
 """
 
-"""
+
 a_sql = ActiveSQLInjection(request)
 links = fuzz.get_fuzz_links()
 a_sql.attack(links)
 
 a_sql.sql_injection_result()
-"""
 
-csrf = CSRF(links)
-csrf.scan()
-csrf.csrf_protection_result()
+#
+# csrf = CSRF(links)
+# csrf.scan()
+# csrf.csrf_protection_result()
 
 
 
