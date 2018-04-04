@@ -132,6 +132,10 @@ def main():
 			b = BruteForce(url, request)
 			flag, username, password, url = b.startBruteForce()
 
+			#nothing to bruteforce so resupply the original url
+			if not url:
+				url.args.url
+
 			fuzz = Fuzzer(request)
 			fuzz.discover(url)
 			fuzz.print_discovered_links()
@@ -157,6 +161,10 @@ def main():
 			b = BruteForce(url, request)
 			flag, username, password, url = b.startBruteForce()
 
+			#nothing to bruteforce so resupply the original url
+			if not url:
+				url=args.url
+
 			fuzz = Fuzzer(request)
 			fuzz.discover(url)
 			fuzz.print_discovered_links()
@@ -177,6 +185,16 @@ def main():
 
 		elif i == "XSS":
 			start = timer()
+
+			b = BruteForce(url, request)
+			flag, username, password, url = b.startBruteForce()
+
+			#nothing to bruteforce so resupply the original url
+			if not url:
+				url=args.url
+
+			fuzz = Fuzzer(request)
+			fuzz.discover(url)
 			x = XSS(request)
 
 			xRf = x.attackReflect(fuzz.get_fuzz_links())
@@ -194,6 +212,11 @@ def main():
 
 			b = BruteForce(url, request)
 			flag, username, password, url = b.startBruteForce()
+
+			#nothing to bruteforce so resupply the original url
+			if not url:
+				url = args.url
+
 
 			fuzz = Fuzzer(request)
 			fuzz.discover(url)
@@ -220,8 +243,18 @@ def main():
 
 		elif i == "SENSITIVE":
 			start = timer()
-			fuzz.print_discovered_links()
+			
+			b = BruteForce(url, request)
+			flag, username, password, url = b.startBruteForce()
 
+			#nothing to bruteforce so resupply the original url
+			if not url:
+				url = args.url
+
+
+			fuzz = Fuzzer(request)
+			fuzz.discover(url)
+			fuzz.print_discovered_links()
 			links = fuzz.get_fuzz_links()
 
 			sensitive = Sensitive(links)
@@ -236,6 +269,7 @@ def main():
 
 		else:
 			logging.error(i + " is an invalid command!")
+			exit()
 
 	for i in data:
 		if data[i] != "":
