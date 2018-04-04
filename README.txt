@@ -1,32 +1,5 @@
 # Automated Detection of Vulnerabilities on Websites
 
-### Dates Due
-
-- [x] Phrase 1 - Feb 9th, 2018
-- [x] Phrase 2 - March 9th, 2018
-- [x] Phrase 3 - April 2nd, 2018
-- [ ] Phrase 4 - April 13th, 2018
-- [ ] Phrase 5 - April 23rd, 2018
-
-### To-Do
-
-Creating scripts that can discover the following vulnerabilities
-- [x] SQL Injections
-- [x] Cross Site Scripting (XSS)
-- [x] Sensitive
-- [x] Failure to restrict files, folders, and URL access
-- [x] Brute Force
-- [x] Cross-Site Request Forgery (CSRF)
-
-Create a command line style program 
-- [x] Ability to take URL
-- [x] Display a score
-- [x] Display a fix for it (prevent it)
-
-Misc
-- [x] Document the codes and how to use it
-- [x] Follow Object Oriented Programming (OOP) standard
-
 ### Requirements
 #### Languages
 Python 3

@@ -35,13 +35,11 @@ fuzz.print_discovered_links()
 links = fuzz.get_fuzz_links()
 """
 
-"""
 p_sql = PassiveSQLInjection(request)
 links = fuzz.get_fuzz_links()
 p_sql.attack(links)
 
 p_sql.sql_injection_result()
-"""
 
 """
 sensitive = Sensitive(links)

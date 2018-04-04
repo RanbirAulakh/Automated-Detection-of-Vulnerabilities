@@ -13,6 +13,7 @@ from timeit import default_timer as timer
 from collections import OrderedDict
 from Attacks.Sensitive import Sensitive
 from Attacks.CSRF import CSRF
+from collections import defaultdict
 
 def choicesDescriptions():
 	return """
@@ -281,6 +282,11 @@ def main():
 						for x in data[i][j]:
 							print(x)
 						print("\n")
+					if type(data[i][j]) is defaultdict:
+						for x in data[i][j]:
+							print(x + "\n---------")
+							for y in data[i][j][x]:
+								print("\t" + y)
 					else:
 						print("{0} {1}".format(j, data[i][j]))
 				classification.vulnerability(i, boolData[i]["name"])
