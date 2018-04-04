@@ -4,52 +4,138 @@ from Utilities.File import File
 class ActiveSQLInjection(object):
 
 	"""
-		This open the passive sql vectors file and loop through all
+		This open the active sql vectors file and loop through all
 		links object to see which link is vulnerable to active sql injection
 	"""
 
 	def __init__(self,request):
 		self.file = File()
 		self.request = request
+		self.sql_errors = {"sql syntax","syntax error","Unclosed quotation mark","Drivers error","Client error","Unknown column"}
+		self.vectors = self.file.getActiveSQLInjection()
+		self.inject_vulnerabilities_list = []
 
 
 	def attack(self,links):
-		print("TESTING ACTIVE SQL ATTACK")
+		print("TESTING Active SQL")
 		"""
 		This function will attempt to perform the active sql injection
 		:param links: a LINK class object with the inputs being an instance of beautiful soup
 		:return:
 		"""
-		self.links = links
-		vectors = self.file.getActiveSQLInjection()
 
-		if self.links:
-			for link in self.links:
-				url = link.getUrl()
-				inputs = link.getInputs()
+		if links:
+			for link in links:
 				payload = {}
-				for vector in vectors:
-					for input in inputs:
-						if input:
-							name = input.get('name')
-							value = input.get('value')
+				if link.getUrl():
+					url = link.getUrl().strip().lower()
+					#do we have input?
+					inputs = link.getInputs()
+					for vector in self.vectors:
+						payload = self.make_post_payload(payload,inputs,vector)
+						self.has_sql_injection_vulnerability(payload,url)
 
-							#if it has no value, give it the sql injection vector value
-							if not value:
-								value = vector
-
-							payload[name] = value
-
-					#submit and test
-					print(payload)
-					query = self.request.post(url,data=payload)
-
-					if "sql syntax" in query.text.lower():
-						print("SQL INJECTION VULNERABILITY FOUND")
-						print(payload)
-						exit()
+						#not a get based but go ahead and try if we can get vul this way either
+						self.has_sql_injection_vulnerability(payload,url,"get")
 
 
+						#do the get based have a sql vulnerability?
+						if self.is_get_based_url(url):
+							payload = {}
+							fields = url.split("?")
+
+							if fields:
+								parameters = []
+								url = fields[0]
+								attributes = fields[1]
+
+								#multiple attributes?
+								if "&" in attributes:
+									parameters = attributes.split("&")
+
+								#single attributes
+								else:
+									parameters = parameters.append(attributes)
+
+								if parameters:
+									for p in parameters:
+										attributes = p.split("=")
+										name = attributes[0]
+										
+										payload[name] = vector
+
+
+									self.has_sql_injection_vulnerability(payload,url,"get")
+								
+
+	def is_get_based_url(self,url):
+		if not url:
+			return False
+
+		url = url.strip().lower()
+		if "?" in url:
+			return True
+
+		return False
+
+	def has_sql_injection_vulnerability(self,payload,url,method="post",skip_login=True):
+		if not url or not method:
+			print("The parameter method and payload cannot be empty!")
+			exit()
+
+		method = method.lower().strip()
+
+		if method!="post" and method!="get":
+			print("the parameter method must be get or post")
+			exit()
+
+		if not payload:
+			return False
+
+		if skip_login and "login" in url.lower():
+			return False
+
+		if method=="post":
+			query = self.request.post(url,data=payload)
+		else:
+			query = query = self.request.get(url,data=payload)
+
+		if not query:
+			return False
+
+		res = query.text.strip().lower()
+
+		if res:
+			for err in self.sql_errors:
+				err = err.strip().lower()
+				if err in res:
+					vul = "url:"+url+"\npayload:"+str(payload)
+					self.inject_vulnerabilities_list.append(vul)
+					return True
+
+		return False
+
+
+	def make_post_payload(self,payload,inputs,vector):
+		if inputs:
+			for input_tag in inputs:
+				name = input_tag.get('name')
+				value = input_tag.get('value')
+
+				if not value:
+					value = vector
+
+				payload[name] = value
+
+		return payload
+
+
+	def sql_injection_result(self):
+		if self.inject_vulnerabilities_list:
+			print("Found "+ str(len(self.inject_vulnerabilities_list)) + " active sql injection potientials")
+			for vul in self.inject_vulnerabilities_list:
+				print(vul)
 
 
 
+			
