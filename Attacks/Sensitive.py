@@ -4,7 +4,7 @@ import logging
 
 class Sensitive(object):
     """
-
+    Check to see if there is any sensitive configuration files such as phpinfo, config.ini, etcetera.
     """
 
     def __init__(self, links):
@@ -13,13 +13,12 @@ class Sensitive(object):
         self.sensitive = defaultdict(list)
         self.vectors = self.file.getSensitiveVector()
 
-
-
     def sensitve_information_disclosure(self,vector,content):
         """
-
-        :param vector:
-        :param content:
+        It checks fot the content, if sensitive word exist in the
+        contents, it could be a breach...
+        :param vector: URLS
+        :param content: website page
         :return: if there is any information disclosed
         """
         if content and vector:
@@ -63,7 +62,7 @@ class Sensitive(object):
         :return: None
         """
         if self.sensitive:
-            logging.info("Sensitive breached result")
+            logging.info("Potential Sensitive breached result")
         for breach in self.sensitive:
             logging.info("Below are the vector breach: " + breach)
             for loc in self.sensitive.get(breach):

@@ -17,13 +17,13 @@ from Attacks.CSRF import CSRF
 def choicesDescriptions():
 	return """
 Vulnerability supports the following (multiple vulnerabilities? seperate by comma):
-	ALL		- Execute all vulnerabilities listed below
 	BRUTE		- Brute Force Every Possible Inputs (LOGIN)
 	A-SQL		- Active SQL Injection
 	P-SQL		- Passive SQL Injection
 	XSS		- Cross Site Scripting
 	CSRF		- Cross Site Forgery
 	DIR-TRA		- Directories/Files Traversal (Failure to restrict files, folders, and URL access)
+	SENSITIVE	- Check for any sensitive data such as web configuration 
 	"""
 
 def main():
@@ -127,6 +127,8 @@ def main():
 		elif i == "A-SQL":
 			start = timer()
 
+			url = args.url
+
 			b = BruteForce(url, request)
 			flag, username, password, url = b.startBruteForce()
 
@@ -149,6 +151,8 @@ def main():
 
 		elif i == "P-SQL":
 			start = timer()
+
+			url = args.url
 
 			b = BruteForce(url, request)
 			flag, username, password, url = b.startBruteForce()
@@ -186,6 +190,8 @@ def main():
 		elif i == "CSRF":
 			start = timer()
 
+			url = args.url
+
 			b = BruteForce(url, request)
 			flag, username, password, url = b.startBruteForce()
 
@@ -195,16 +201,21 @@ def main():
 			links = fuzz.get_fuzz_links()
 
 			csrf = CSRF(links)
+
+			csrfToken = input("Enter your CSRF Token (Don't have any? Press Enter): ")
+			if csrfToken is not None or csrfToken != "":
+				csrf.add_token(csrfToken)
+
 			csrf.scan()
-			vuln_urls, vuln_inputs = csrf.csrf_protection_result()
+			vulnUrls, vulnInputs = csrf.csrf_protection_result()
 
 			end = timer()
 
-			if len(vuln_urls) > 0 or len(vuln_inputs) > 0:
-				total_vuln = len(vuln_urls) + len(vuln_inputs)
+			if len(vulnUrls) > 0 or len(vulnInputs) > 0:
+				total_vuln = len(vulnUrls) + len(vulnInputs)
 				boolData[i]["bool"] = True
 				data[i] = {"# of potiential issue due to no CSRF protection:":total_vuln,
-						   "Vulnerability URLS:\n--------":vuln_urls, "Vulnerability Inputs:\n--------":vuln_inputs,
+						   "Vulnerability URLS:\n--------":vulnUrls, "Vulnerability Inputs:\n--------":vulnInputs,
 						   "--- Completed in %.3f ms" % (end - start):""}
 
 		elif i == "SENSITIVE":
@@ -220,7 +231,8 @@ def main():
 
 			if len(sensitiveLst) > 0:
 				boolData[i]["bool"] = True
-				data[i] = {"Sensitive List:":sensitiveLst, "--- Completed in %.3f ms" % (end - start):""}
+				data[i] = {"Potential Sensitive Breach:\n--------":sensitiveLst,
+						   "--- Completed in %.3f ms" % (end - start):""}
 
 		else:
 			logging.error(i + " is an invalid command!")

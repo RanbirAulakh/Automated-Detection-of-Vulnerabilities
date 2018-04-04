@@ -18,12 +18,12 @@ class ActiveSQLInjection(object):
 
 
 	def attack(self,links):
-		logging.info("Executing Active SQL Injection...")
 		"""
 		This function will attempt to perform the active sql injection
 		:param links: a LINK class object with the inputs being an instance of beautiful soup
-		:return:
+		:return: None
 		"""
+		logging.info("Executing Active SQL Injection...")
 
 		if links:
 			for link in links:
@@ -70,6 +70,11 @@ class ActiveSQLInjection(object):
 								
 
 	def is_get_based_url(self,url):
+		"""
+		Check to see if there is any PHP "characters" in URL
+		:param url: website URL
+		:return: bool
+		"""
 		if not url:
 			return False
 
@@ -80,6 +85,14 @@ class ActiveSQLInjection(object):
 		return False
 
 	def has_sql_injection_vulnerability(self,payload,url,method="post",skip_login=True):
+		"""
+		Check to see if SQL injection exists
+		:param payload: POST/GET data
+		:param url: website URL
+		:param method: form
+		:param skip_login: if still on login page
+		:return: if sql injection is successful
+		"""
 		if not url or not method:
 			logging.error("The parameter method and payload cannot be empty!")
 			exit()
@@ -118,6 +131,13 @@ class ActiveSQLInjection(object):
 
 
 	def make_post_payload(self,payload,inputs,vector):
+		"""
+		Execute POST data to website
+		:param payload: POST/GET data
+		:param inputs: form inputs fields
+		:param vector: urls
+		:return: POST/GET data
+		"""
 		if inputs:
 			for input_tag in inputs:
 				name = input_tag.get('name')
@@ -132,6 +152,10 @@ class ActiveSQLInjection(object):
 
 
 	def sql_injection_result(self):
+		"""
+		Prints out the results
+		:return: list of results
+		"""
 		if self.inject_vulnerabilities_list:
 			logging.info("Found "+ str(len(self.inject_vulnerabilities_list)) + " active sql injection potientials")
 			for vul in self.inject_vulnerabilities_list:

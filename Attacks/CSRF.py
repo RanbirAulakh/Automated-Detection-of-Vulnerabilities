@@ -20,6 +20,11 @@ class CSRF(object):
 		self.vuln_urls = []
 
 	def add_token(self,token):
+		"""
+		Add tokens to the list
+		:param token: CSRF token
+		:return: None
+		"""
 		if not token:
 			logging.error("Token cannot be empty!")
 			exit()
@@ -27,6 +32,11 @@ class CSRF(object):
 		self.tokens.append(token)
 
 	def scan(self):
+		"""
+		Go through every webpage (links) and uses has_csrf_token to scan
+		if there is any CSRF protection in webpage
+		:return: None
+		"""
 		if self.links:
 			logging.info("Scanning for CSRF Protection...")
 			for link in self.links:
@@ -52,6 +62,13 @@ class CSRF(object):
 
 
 	def has_csrf_token(self,content,url,is_input=True):
+		"""
+		Checks to see if CSRF is missing
+		:param content: webpage HTML
+		:param url: website URL
+		:param is_input: check if there is inputs
+		:return: None
+		"""
 		if content:
 			protected = False
 			content = content.strip()
@@ -72,6 +89,10 @@ class CSRF(object):
 
 
 	def csrf_protection_result(self):
+		"""
+		CSRF results
+		:return: CSRF results
+		"""
 		if self.vuln_urls or self.vuln_inputs:
 			logging.info("Found "+ str(len(self.vuln_inputs) + len(self.vuln_urls)) + " potiential issue due to no csrf protection")
 			

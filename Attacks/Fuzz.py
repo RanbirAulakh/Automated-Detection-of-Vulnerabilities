@@ -60,11 +60,22 @@ class Fuzzer(object):
         exit()
 
     def set_beautiful_soup(self,text):
+        """
+        Store HTML content
+        :param text: HTML content
+        :return: None
+        """
         if not text:
             self.display_msg_and_terminate("You must supply an text for the beautiful soup!")
         self.soup = BeautifulSoup(text,self.parser)
 
     def validate_url(self,url, msg="You must supply an url!"):
+        """
+        Validate the URL
+        :param url: website URL
+        :param msg: error message if any
+        :return: None
+        """
         if not url:
             self.display_msg_and_terminate(msg)
 
@@ -80,6 +91,12 @@ class Fuzzer(object):
 
 
     def discover(self,url,limit=50):
+        """
+        Limit # links to crawl
+        :param url: website URL
+        :param limit: # of links
+        :return: None
+        """
         #ensure only valid url are allowed
         self.validate_url(url)
         self.domain = self.strip_index(url)
@@ -88,6 +105,11 @@ class Fuzzer(object):
         self.crawler(url,limit)
 
     def return_path_last_directory(self,url):
+        """
+        Returns path last directory
+        :param url: website URL
+        :return: path last directory
+        """
         if url:
             length = url.count('/')
             if  length > 0:
@@ -106,6 +128,13 @@ class Fuzzer(object):
 
 
     def crawler(self,url,limit=50):
+        """
+        Crawl and search for all possible links and search if there
+        are any input fields within that page
+        :param url: website url
+        :param limit: # of links to crawl
+        :return: None
+        """
         logging.info("Fuzz/Crawling...")
         self.validate_url(url) #the very first url must be a valid url
         prevCrawled = url
@@ -191,6 +220,11 @@ class Fuzzer(object):
         #print(self.links)
 
     def strip_index(self,url):
+        """
+        Strips the index
+        :param url: website URL
+        :return: website URL
+        """
         for ext in self.extensions:
             index = "index"+ext
             index = index.lower()
@@ -203,9 +237,20 @@ class Fuzzer(object):
 
 
     def is_internal_link(self,url):
+        """
+        Check to see if its an internal link
+        :param url: website url
+        :return: bool
+        """
         return self.domain in url
 
     def canonicalize_url(self,link,parentUrl):
+        """
+        Normalize the URLs
+        :param link: website URL
+        :param parentUrl: main domain
+        :return: link
+        """
         if not link:
             self.display_msg_and_terminate("You must supply an link to use the canonicalize_url function")
 
@@ -223,7 +268,10 @@ class Fuzzer(object):
 
 
     def print_discovered_links(self):
-
+        """
+        Prints out the results
+        :return: None
+        """
         logging.debug("Internal Links")
         for internal in self.internalLinks:
             logging.debug(internal)
@@ -235,10 +283,19 @@ class Fuzzer(object):
         logging.info("# of External Links: " + str(len(self.externalLinks)))
 
     def parse_inputs(self,text):
+        """
+        Parse Inputs
+        :param text: HTML content
+        :return: list of inputs
+        """
         self.set_beautiful_soup(text)
         return self.soup.find_all('input')
 
     def get_fuzz_links(self):
+        """
+        Get Fuzz Links
+        :return: Fuzz Links
+        """
         return self.links
 
 
