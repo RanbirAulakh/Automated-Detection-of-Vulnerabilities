@@ -16,6 +16,7 @@ class CSRF(object):
 			"csrf_protection",
 			"X-CSRF-Token"
 		}
+		self.user_defined_token = None
 		self.vuln_inputs = []
 		self.vuln_urls = []
 
@@ -29,7 +30,7 @@ class CSRF(object):
 			logging.error("Token cannot be empty!")
 			exit()
 
-		self.tokens.append(token)
+		self.user_defined_token = token.lower()
 
 	def scan(self):
 		"""
@@ -74,7 +75,7 @@ class CSRF(object):
 			content = content.strip()
 			for token in self.tokens:
 				token = token.lower().strip()
-				if token in content:
+				if token in content or token in self.user_defined_token:
 					protected = True
 			
 			if not protected:
