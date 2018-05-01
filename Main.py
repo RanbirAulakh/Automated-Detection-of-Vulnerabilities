@@ -64,8 +64,18 @@ def main():
 	url = args.url
 	vul = args.vulnerability
 
+
+
 	request = Requests()
 	request = request.request
+
+	#do we have dvwa in the url? if yes bruteforce the first login page
+	if "dvwa" in url.lower():
+		b = BruteForce(url, request)
+		flag, username, password, new_url = b.startBruteForce()
+		if flag:
+			url = new_url
+
 
 	fuzz = Fuzzer(request)
 
@@ -128,22 +138,11 @@ def main():
 		elif i == "A-SQL":
 			start = timer()
 
-			url = args.url
-
-			b = BruteForce(url, request)
-			flag, username, password, url = b.startBruteForce()
-
-			#nothing to bruteforce so resupply the original url
-			if not url:
-				url.args.url
-
-			fuzz = Fuzzer(request)
-			fuzz.discover(url)
 			fuzz.print_discovered_links()
-			links = fuzz.get_fuzz_links()
+			#links = fuzz.get_fuzz_links()
 
 			a_sql = ActiveSQLInjection(request)
-			links = fuzz.get_fuzz_links()
+			#links = fuzz.get_fuzz_links()
 			a_sql.attack(links)
 
 			inject_vulnerabilities_list = a_sql.sql_injection_result()
@@ -157,22 +156,11 @@ def main():
 		elif i == "P-SQL":
 			start = timer()
 
-			url = args.url
-
-			b = BruteForce(url, request)
-			flag, username, password, url = b.startBruteForce()
-
-			#nothing to bruteforce so resupply the original url
-			if not url:
-				url=args.url
-
-			fuzz = Fuzzer(request)
-			fuzz.discover(url)
 			fuzz.print_discovered_links()
 
-			links = fuzz.get_fuzz_links()
+			#links = fuzz.get_fuzz_links()
 			p_sql = PassiveSQLInjection(request)
-			links = fuzz.get_fuzz_links()
+			#links = fuzz.get_fuzz_links()
 			p_sql.attack(links)
 
 			inject_vulnerabilities_list = p_sql.sql_injection_result()
@@ -187,15 +175,6 @@ def main():
 		elif i == "XSS":
 			start = timer()
 
-			b = BruteForce(url, request)
-			flag, username, password, url = b.startBruteForce()
-
-			#nothing to bruteforce so resupply the original url
-			if not url:
-				url=args.url
-
-			fuzz = Fuzzer(request)
-			fuzz.discover(url)
 			x = XSS(request)
 
 			xRf = x.attackReflect(fuzz.get_fuzz_links())
@@ -208,26 +187,9 @@ def main():
 
 		elif i == "CSRF":
 			start = timer()
-
-			url = args.url
-
-			b = BruteForce(url, request)
-			flag, username, password, url = b.startBruteForce()
-
-			#nothing to bruteforce so resupply the original url
-			if not url:
-				url = args.url
-
-
-			fuzz = Fuzzer(request)
-			fuzz.discover(url)
-			fuzz.print_discovered_links()
-			links = fuzz.get_fuzz_links()
-
 			csrf = CSRF(links)
-
 			csrfToken = input("Enter your CSRF Token (Don't have any? Press Enter): ")
-			if csrfToken is not None or csrfToken != "":
+			if csrfToken is not None and csrfToken != "":
 				csrf.add_token(csrfToken)
 
 			csrf.scan()
@@ -244,19 +206,8 @@ def main():
 
 		elif i == "SENSITIVE":
 			start = timer()
-			
-			b = BruteForce(url, request)
-			flag, username, password, url = b.startBruteForce()
-
-			#nothing to bruteforce so resupply the original url
-			if not url:
-				url = args.url
-
-
-			fuzz = Fuzzer(request)
-			fuzz.discover(url)
 			fuzz.print_discovered_links()
-			links = fuzz.get_fuzz_links()
+			#links = fuzz.get_fuzz_links()
 
 			sensitive = Sensitive(links)
 			sensitive.search()

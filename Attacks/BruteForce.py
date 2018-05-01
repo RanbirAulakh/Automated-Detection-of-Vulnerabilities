@@ -54,7 +54,7 @@ class BruteForce(object):
                     data["password"] = (textfile[j].strip())
                     s = self.request.post(r.url, data)
 
-                    if(s.url != self.url and "login" not in s.url):
+                    if "login" not in s.url.lower():
                         url = s.url
                         username = textfile[i].strip()
                         password = textfile[j].strip()

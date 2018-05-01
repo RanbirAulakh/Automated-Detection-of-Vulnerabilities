@@ -9,7 +9,10 @@ class Requests(object):
     """
 
     def __init__(self):
+        requests.packages.urllib3.disable_warnings() 
         self.request = requests.Session()
+        self.request.verify=False
+
 
     def request(self):
         """
