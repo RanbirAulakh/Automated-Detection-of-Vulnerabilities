@@ -1,0 +1,19 @@
+Group 4 investigation of Group 6
+Date: 17 April 2018
+
+The investigation of Group 6's Automated Vulnerability Detector was somewhat short due to the fact that the program's
+focus was on evaluating the security of websites; hence, there being no data to protect. Therefore it was difficult for
+us to find a good way to objectively evaluate your project. In your case your project has no security holes because
+it is not about keeping information private but it is about finding the vulnerabilities. The other issue we had is that
+it is hard to evaluate the project based on design decisions because none of these decisions compromise the program in
+any way either.
+
+Therefore it is our decision that our evaluation is going to be based on recommendations for expanding the project to
+make it more versatile. One such idea to add to the program would be a way to evaluate existing security bugs. One of
+the ideas we had for a more versatile application is to keep track of major security flaws found in various different
+programs such as a check to make sure the PHP version is up to date or a node library is not installed. This way the
+programs capabilities can be expanded as new application flaws are discovered and the program can warn the user.
+This database can be used to keep up to date on flaws and with some basic parsing can be used to warn users as new
+vulnerabilities are discovered.
+https://nvd.nist.gov/
+
