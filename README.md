@@ -102,6 +102,9 @@ It will brute force the login and check for possible XSS weaknesses (Stored and 
 `$ python3 main.py -v BRUTE -u http://localhost/dvwa -d`
 It will brute force the login, and prints out the username/password. At the same time, it will enable debugging. 
 
+`$ python3 Main.py -v BRUTE,A-SQL,P-SQL,XSS,CSRF,DIR-TRA,SENSITIVE -u https://localhost/dvwa/index.php`
+It will execute every single vulnerabilities.
+
 ### Credits (+URL)
 
 filenames.txt/directories.txt
