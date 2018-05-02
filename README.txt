@@ -46,33 +46,33 @@ Vulnerability supports the following (multiple vulnerabilities? seperate by comm
 
 ```
 
-`$ python3 main.py -v <Vulnerability Type> -u <URL> -d <OPTIONAL DEBUG>`
+`$ python3 Main.py -v <Vulnerability Type> -u <URL> -d <OPTIONAL DEBUG>`
 
-`$ python3 main.py -v BRUTE -u http://localhost/dvwa/`
+`$ python3 Main.py -v BRUTE -u http://localhost/dvwa/`
 It will brute force the login, and prints out the username/password
 
-`$ python3 main.py  -v DIR-TRA -u http://localhost/dvwa`
+`$ python3 Main.py  -v DIR-TRA -u http://localhost/dvwa`
 It will check for unathorized folder/file access
 
-`$ python3 main.py -v XSS -u http://localhost/dvwa`
+`$ python3 Main.py -v XSS -u http://localhost/dvwa`
 It will check for possible XSS weaknesses (Stored and Reflected) 
 
-`$ python3 main.py -v A-SQL -u http://localhost/dvwa`
+`$ python3 Main.py -v A-SQL -u http://localhost/dvwa`
 Go through the list of links and their input and attempt multiple active SQL injections vectors. Active SQL Injection perform read and write.
 
-`$ python3 main.py -v P-SQL -u http://localhost/dvwa`
+`$ python3 Main.py -v P-SQL -u http://localhost/dvwa`
 Go through the list of links and their input and attempt multiple passive SQL injections vectors. Passive SQL Injection perform read, not write.
 
-`$ python3 main.py -v SENSITIVE -u http://localhost/dvwa`
+`$ python3 Main.py -v SENSITIVE -u http://localhost/dvwa`
 Check to see if there are any leak of sensitive information such as configuration files; for example phpinfo, config.ini or backup logs etc using predefined sensitive keywords
 
-`$ python3 main.py -v CSRF -u http://localhost/dvwa`
+`$ python3 Main.py -v CSRF -u http://localhost/dvwa`
 Takes link object and read the link object such as the content, inputs, and url to see if the CSRF token is in the link object.
 
-`$ python3 main.py -v BRUTE,XSS -u http://localhost/dvwa`
+`$ python3 Main.py -v BRUTE,XSS -u http://localhost/dvwa`
 It will brute force the login and check for possible XSS weaknesses (Stored and Reflected). Supports multiple vulnerabilities, seperate them by comma
 
-`$ python3 main.py -v BRUTE -u http://localhost/dvwa -d`
+`$ python3 Main.py -v BRUTE -u http://localhost/dvwa -d`
 It will brute force the login, and prints out the username/password. At the same time, it will enable debugging. 
 
 `$ python3 Main.py -v BRUTE,A-SQL,P-SQL,XSS,CSRF,DIR-TRA,SENSITIVE -u https://localhost/dvwa/index.php`
