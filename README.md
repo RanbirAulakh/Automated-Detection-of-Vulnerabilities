@@ -5,8 +5,8 @@
 - [x] Phrase 1 - Feb 9th, 2018
 - [x] Phrase 2 - March 9th, 2018
 - [x] Phrase 3 - April 2nd, 2018
-- [ ] Phrase 4 - April 13th, 2018
-- [ ] Phrase 5 - April 23rd, 2018
+- [x] Phrase 4 - April 13th, 2018
+- [x] Phrase 5 - May 2nd, 2018
 
 ### To-Do
 
