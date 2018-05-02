@@ -1,0 +1,60 @@
+Ranbir Aulakh
+- Developed traversal directories/files (DirecotiresFilesTraversal.py), brute force (BruteForce.py), classification ratings (Classification), main program (Main.py)
+- Attack vector (text files): userpass.txt, directories.txt, filenames.txt
+- Developed and maintained Main.py program to ensure it can execute all
+- Used OWASP to produce custom rating system (classification) for each vulnerabilities
+- Documented usage of the program and documented/commented the whole source codes
+- Composed README.txt
+- Ensure logging output is readable
+- Ensure program produces error messages (invalid arguments, bad URL request)
+- Performed unit testing
+- Managed Github Repository
+- Update and maintain poster
+- Created a poster template, proofread
+	- Vulnerabilities, Ethical/Legal issues, Web Vulnerability Scanner Implementation screenshot, pipeline diagram, conclusion, future work, and references
+- Update and maintain write-up (paper)
+	- Cross-site forgery (CSRF), Brute Force, Failure to restrict files/folders/URL access, Design considerations, Implementation, Architecture, Ethical/Legal Issues (White/Black/Gray Hat), part of conclusions 
+- Investigated and record issues found in Group 7 & 9
+- Submitted Phase 1, 3, 4, and 5 (Codes and Paper)
+
+Jason Durek
+- Developed XSS.py and XSS scripts
+- Attack vector (text files): XSSAttacks.txt
+- Half of section 2 (XSS, SQL, and early versions of the others), Section 6 to 10, and small parts in the remaining sections in the paper
+- General proofreading and revision of paper and all other formal documents (Peer Reviews, Poster)
+- Attempt to get poster References section working with specific ACM-Reference-Format, was unable to get that working, fell back to easier method found by Ranbir
+- Testing of RoboBrowser library (Library that was rejected early on due to lack of documentation and support)
+- Investigated and record issues found in Group 7 & 9
+- Printed Poster and obtained from the Hub
+
+Kemoy Campbell
+- Implement the necessary tools and environments such as DVWA, python version, XAMPP (Apache & Phpmyadmin) and other tools the team needs to successful develops the project
+- Documented the Project dependencies and environment setup
+- Performed unit testings
+- Patch the changes to the codes based on investigation reports from the other team
+- Patch bug fixes from phase 3 within Main.py and CSRF.py 
+- Develops the overall layout and structures of the web vulnerability scanner
+- Phase 1
+- In Write-up (paper), typed Abstract, Introduction, Broken Authentication, Vulnerabilities
+- Proofreading
+- Phase 2
+	- Set up project codes structure
+	- SQL injection codes 
+	- Developed Link.py and Fuzz.py
+	- Set up team development dependencies and environment as well as tools need
+	- Proof reading the report
+	- Submitted Phase 2
+- Phase 3 Develops the following programs
+	- CSRF.py, Fuzz.py, ActiveSQLInjection.py, PassiveSQLInjection.py, Sensitive.py, Link.py, File.py, Request.py
+	- Attack vectors (files)
+		- activeSQL.txt, passiveSQL.txt, sensitive.txt
+- Phase 4
+	- Full Participation in team code review,recorded and suggest criticism feedbacks regarding vulnerabilities we discovered.
+	- Testing of team 7 and 9
+- Phase 5
+	- Poster overall structure and layout
+	- Fix the bugs that was discovered in phase 4 by investigating teams
+	- Maintain and update poster
+	- Poster
+		- Introduction, Website Attacks Statistics, A-SQL screenshot, Edit & Order the flow of the sections, conclusion, Lesson Learned
+	- Submit the poster

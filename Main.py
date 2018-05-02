@@ -69,13 +69,26 @@ def main():
 	request = Requests()
 	request = request.request
 
-	#do we have dvwa in the url? if yes bruteforce the first login page
+	boolData = OrderedDict({"BRUTE":{"bool": False, "name":"Brute Force"},
+							"DIR-TRA":{"bool": False,"name":"Directories/Files Traversal"},
+							"A-SQL":{"bool": False, "name":"Active SQL Injection"},
+							"P-SQL":{"bool": False, "name":"Passive SQL Injection"},
+							"XSS":{"bool": False, "name":"Cross-Site Scripting (XSS)"},
+							"SENSITIVE":{"bool": False, "name":"Sensitive Files Disclosure"},
+							"CSRF":{"bool": False, "name":"Cross Site Forgery (CSRF)"}})
+	data = OrderedDict({"BRUTE":"", "DIR-TRA":"", "A-SQL":"", "P-SQL":"", "XSS":"", "CSRF":"", "SENSITIVE":""})
+
+	# do we have dvwa in the url? if yes bruteforce the first login page
 	if "dvwa" in url.lower():
+		start = timer()
 		b = BruteForce(url, request)
 		flag, username, password, new_url = b.startBruteForce()
+		end = timer()
 		if flag:
 			url = new_url
-
+			boolData["BRUTE"]["bool"] = True
+			data["BRUTE"] = {"Cracked?": str(flag), "Before URL:": url, "After Login URL:": new_url, "Username:": username,
+					   "Password:": password, "--- Completed in %.3f ms" % (end - start): ""}
 
 	fuzz = Fuzzer(request)
 
@@ -91,15 +104,6 @@ def main():
 	if vul is None or url is None:
 		choicesDescriptions()
 		sys.exit(0)
-
-	boolData = OrderedDict({"BRUTE":{"bool": False, "name":"Brute Force"},
-							"DIR-TRA":{"bool": False,"name":"Directories/Files Traversal"},
-							"A-SQL":{"bool": False, "name":"Active SQL Injection"},
-							"P-SQL":{"bool": False, "name":"Passive SQL Injection"},
-							"XSS":{"bool": False, "name":"Cross-Site Scripting (XSS)"},
-							"SENSITIVE":{"bool": False, "name":"Sensitive Files Disclosure"},
-							"CSRF":{"bool": False, "name":"Cross Site Forgery (CSRF)"}})
-	data = OrderedDict({"BRUTE":"", "DIR-TRA":"", "A-SQL":"", "P-SQL":"", "XSS":"", "CSRF":"", "SENSITIVE":""})
 
 	#if fFile is not None and len(args.vulnerability.split(",")) > 0:
 	#	logging.error("Only use --file (-f) command for specific vulnerability!")
@@ -243,7 +247,5 @@ def main():
 				classification.vulnerability(i, boolData[i]["name"])
 			else:
 				print("This vulnerability, {0}, does not exist!".format(boolData[i]["name"]))
-
-
 
 main()
