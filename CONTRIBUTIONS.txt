@@ -37,6 +37,7 @@ Kemoy Campbell
 - Phase 1
 - In Write-up (paper), typed Abstract, Introduction, Broken Authentication, Vulnerabilities
 - Proofreading
+- Assist in bug fix on main.py
 - Phase 2
 	- Set up project codes structure
 	- SQL injection codes 
@@ -57,4 +58,6 @@ Kemoy Campbell
 	- Maintain and update poster
 	- Poster
 		- Introduction, Website Attacks Statistics, A-SQL screenshot, Edit & Order the flow of the sections, conclusion, Lesson Learned
-	- Submit the poster
+		- Submit the poster
+        - paper
+		- conclusion,lesson learned(responding to team investigation & other lessons learned), proof reading
