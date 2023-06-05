@@ -2,11 +2,11 @@
 
 ### Dates Due
 
-- [x] Phrase 1 - Feb 9th, 2018
-- [x] Phrase 2 - March 9th, 2018
-- [x] Phrase 3 - April 2nd, 2018
-- [x] Phrase 4 - April 13th, 2018
-- [x] Phrase 5 - May 2nd, 2018
+- [x] Phase 1 - Feb 9th, 2018
+- [x] Phase 2 - March 9th, 2018
+- [x] Phase 3 - April 2nd, 2018
+- [x] Phase 4 - April 13th, 2018
+- [x] Phase 5 - May 2nd, 2018
 
 ### To-Do
 
